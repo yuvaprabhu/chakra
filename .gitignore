@@ -1,0 +1,9 @@
+data/bars/
+data/minutes/
+data/meta/
+data/universe/
+data/raw/
+logs/
+__pycache__/
+*.pyc
+.pytest_cache/
