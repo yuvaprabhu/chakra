@@ -30,7 +30,7 @@ import numpy as np
 import pandas as pd
 import yaml
 
-ROOT = Path("/home/user/nse-screener")
+ROOT = Path(__file__).resolve().parent.parent
 PANEL_8Y = "data/backtest_panels/bottom_panel.parquet"
 PANEL_3Y = ROOT / "data" / "screen" / "features.parquet"
 OUT_JSON = ROOT / "data" / "screen" / "strategy_audit.json"

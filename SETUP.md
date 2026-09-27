@@ -59,7 +59,7 @@ pip install -r requirements.txt
 # 1. Instrument master (~5 sec). Downloads the NSE symbol list from
 #    Upstox and writes data/raw/upstox_nse_instruments.csv. The universe
 #    scan reads this to know which ISINs to hit.
-python3 -c "from screener.upstox import load_instruments; load_instruments('data/raw/upstox_nse_instruments.csv', refresh=True); print('instruments loaded')"
+python3 -c "from screener.upstox import load_instruments; load_instruments('data/raw/upstox_nse_instruments.csv', download=True); print('instruments loaded')"
 
 # 2. Scan market cap for every NSE equity (~30-60 min).
 #    Yahoo Finance is rate-limited — 3 workers, ~5 req/s. Resumable:
@@ -100,20 +100,81 @@ python3 scripts/bottom_lab.py
 python3 scripts/strategy_audit.py
 
 # 11. Export dashboard JSON shards (~30 sec).
+#     Needs data/raw/index_catalog.csv. If you have not downloaded the
+#     NSE ind_*list.csv files (see step 11a), create an empty stub:
+#         printf "index_name,kind,size\n" > data/raw/index_catalog.csv
+#     Everything will render — sector/broad labels just fall back to "sector".
 python3 scripts/export_dashboard.py
 
+# 11a. (optional) Populate the index catalog properly.
+#      Download NSE index constituent CSVs from niftyindices.com (files
+#      named ind_nifty500list.csv, ind_niftybanklist.csv, etc.) into
+#      data/raw/, then:
+#      python3 scripts/load_indices.py
+#      python3 scripts/export_dashboard.py   # re-export with real labels
+
 # 12. Serve the dashboard.
-python3 -m http.server 8000 --directory dashboard
-# open http://localhost:8000
+python3 -m http.server 4747 --directory dashboard
+# open http://localhost:4747
 ```
 
 Total: 3-5 hours of mostly-unattended time. Do the long steps (2, 4, 9)
 overnight or in the background — they can all be killed and resumed.
 
+Observed timings on a MacBook Pro (M-series, 27-Sep-2026 cold run):
+step 2 ~26 min, step 4 ~21 s (fast — Upstox is generous), step 8 ~1 min,
+step 9 ~4 min, step 10 ~13 s, step 11 <5 s. Total ~35 min end-to-end,
+well under the 3-5 h estimate above.
+
 If Yahoo blocks step 2 with 429s, cut concurrency (edit `WORKERS = 1`
 in `scripts/scan_all_mcap.py`), wait an hour, retry. If NSE bhavcopy
 gets Akamai-blocked in step 4, the script logs errors and continues;
 missed days retry next run.
+
+## Known cold-start bugs and fixes
+
+All of these were fixed in the 27-Sep-2026 pass. If you are on an older
+snapshot and hit them, apply the fix:
+
+1. **`yfinance` missing from requirements.txt.** `scripts/scan_all_mcap.py`
+   (step 2) fails with `ModuleNotFoundError: yfinance`. Fix: `pip install
+   yfinance`. The dep is committed to requirements.txt now.
+2. **`sync_universe.py` crashes on empty `data/bars/`.** Step 4 dies with
+   `_duckdb.IOException: No files found ... data/bars/year=*/bars.parquet`
+   because line 31 assumes the store is warm. Fix: the query is now wrapped
+   in try/except and treats a missing store as "everything needs backfill".
+3. **`bottom_lab.py` multiprocessing recursion on macOS.** Step 9 dies with
+   `RuntimeError: An attempt has been made to start a new process before
+   the current process has finished its bootstrapping phase.` Root cause:
+   Python 3.8+ on macOS defaults to `spawn`, and this script kicks off a
+   `Pool()` at module scope, so each spawned worker re-imports the script
+   and forks its own workers → infinite recursion. Fix: `mp.set_start_method
+   ("fork", force=True)` at the top of the script.
+4. **Hard-coded cloud paths.**
+   - `scripts/bottom_lab.py` had `--panel` default pointing at
+     `/tmp/claude-.../scratchpad/bl/bottom_panel.parquet`. Fix: default is
+     now `data/backtest_panels/bottom_panel.parquet`.
+   - `scripts/strategy_audit.py` had `ROOT = Path("/home/user/nse-screener")`.
+     Fix: `ROOT = Path(__file__).resolve().parent.parent`.
+   - `scripts/harden_playbook.py`, `scripts/volume_lab.py`,
+     `scripts/ma_pivot_retest_study.py` still have the old scratchpad PANEL
+     constant. They are not on the daily path, so left alone; edit if you
+     run them.
+5. **`data/raw/index_catalog.csv` missing.** `scripts/export_dashboard.py`
+   (step 11) fails with `FileNotFoundError: data/raw/index_catalog.csv`.
+   The file is written by `scripts/load_indices.py`, which reads NSE
+   `ind_*list.csv` constituent files that must be downloaded by hand from
+   niftyindices.com. Fix (quick, unblocks dashboard): create an empty stub
+   (`printf "index_name,kind,size\n" > data/raw/index_catalog.csv`). All
+   dashboard sector/broad labels then default to "sector". For real labels,
+   do step 11a above.
+6. **`dashboard/lightweight-charts.js` missing.** The dashboard shell renders
+   but the chart pane shows "Charting library did not load ... file is
+   missing." The v2 code tarball did not include the vendored TradingView
+   Lightweight Charts build. Fix: the file (v4.2.3, 160 KB, Apache-2.0)
+   is back in the repo. If you snapshot the code without it, grab it from
+   `https://unpkg.com/lightweight-charts@4.2.3/dist/lightweight-charts.standalone.production.js`
+   and save as `dashboard/lightweight-charts.js`.
 
 ## Refresh data with today's session (optional)
 

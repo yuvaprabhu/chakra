@@ -1,3 +1,4 @@
+<meta charset="utf-8">
 <title>Chakra Terminal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1970,21 +1971,14 @@ function drawPortfolio(){
     +'fresh-event detection, close-based ATR stop from fill, 10-slot concurrent portfolio, '
     +'0.50% round trip, daily equity mark-to-market. Coverage 8yr where features exist on '
     +'the extended panel, 3yr for screens that need pivot/CPR/VCP features. Rank by CAGR.';
-  // Star rating from real audit numbers. Cutoffs:
-  //   3 = Elite   : CAGR >= 20 AND MaxDD >= -30 AND (mean/trade > 1.0)
-  //   2 = Solid   : CAGR >= 10 AND MaxDD >= -40 AND (mean/trade > 0.5)
-  //   1 = Positive: CAGR > 5
-  //   0 = None
-  // A rule from the "MR" family must ALSO have win% >= 55 to earn any star
-  // (a mean-reversion setup with a coin-flip win rate is broken by definition).
-  const stars=r=>{
-    const c=r.cagr_pct||0, dd=r.max_dd_pct||0, mr=r.mean_ret_pct||0, w=r.win_pct||0;
-    if(r.family==='mean_reversion' && w<55) return 0;
-    if(c>=20 && dd>=-30 && mr>1.0) return 3;
-    if(c>=10 && dd>=-40 && mr>0.5) return 2;
-    if(c>5) return 1;
-    return 0;
-  };
+  // Manual whitelist: only the top 3 risk-adjusted screens get a star.
+  // Everything else shows "-" regardless of audit numbers.
+  const STARRED = new Set([
+    'SW - Trend Stack',
+    'SW - Monthly R1 Retest',
+    'SW - Leader Dip Concentrated',
+  ]);
+  const stars=r=>STARRED.has(r.title) ? 1 : 0;
   const starStr=n=>n?'<span style="color:#FFC24B;letter-spacing:1px">'+'★'.repeat(n)+'</span> ':'';
 
   // sort key per column
@@ -2047,7 +2041,7 @@ function drawPortfolio(){
     const st=stars(r);
     return '<tr data-n="'+r.name+'"'+(r.name===BTSEL?' aria-selected="true"':'')+'>'
       +'<td style="text-align:left"><span class="rank">'+(i+1)+'</span></td>'
-      +'<td class="num" title="'+(st===3?'Elite: CAGR>=20% & DD<=30%':st===2?'Solid: CAGR>=10% & DD<=40%':st===1?'Positive: CAGR>5%':'Not recommended')+'">'+(starStr(st)||'<span style="color:var(--t3)">-</span>')+'</td>'
+      +'<td class="num" title="'+(st===1?'Top 3 risk-adjusted (whitelisted)':'')+'">'+(starStr(st)||'<span style="color:var(--t3)">-</span>')+'</td>'
       +'<td style="text-align:left"><div class="sym" style="color:var(--t1)">'+r.title+'</div></td>'
       +'<td class="num">'+famBadge(r.family)+'</td>'
       +'<td class="num" style="color:var(--t3)">'+r.coverage+'</td>'
@@ -2066,10 +2060,11 @@ function drawPortfolio(){
   $('#btBody').onclick=e=>{const tr=e.target.closest('tr'); if(!tr||!tr.dataset.n)return;
     BTSEL=tr.dataset.n; drawBacktest();};
   $('#btCaveat').innerHTML=
-    '<b>Rating (Star column).</b> <span style="color:#FFC24B">★★★</span> <b>Elite</b>: CAGR &ge; 20%, Max DD &ge; -30%, mean/trade &gt; 1%. Real tradeable edge. '
-    +'<span style="color:#FFC24B">★★</span> <b>Solid</b>: CAGR &ge; 10%, Max DD &ge; -40%, mean/trade &gt; 0.5%. Works but sit through bigger pain. '
-    +'<span style="color:#FFC24B">★</span> <b>Positive</b>: CAGR &gt; 5% but risk profile weak. No stars = negative CAGR or broken structure. '
-    +'A mean-reversion (MR) screen must also have Win% &ge; 55 to earn any star (a coin-flip win rate on a bounce setup is broken by definition). '
+    '<b>Rating (Star column).</b> <span style="color:#FFC24B">★</span> marks the top 3 risk-adjusted screens from the audit, whitelisted manually: '
+    +'<b>SW - Trend Stack</b> (TC, 3yr: 38% win, +26% CAGR, -14% DD), '
+    +'<b>SW - Monthly R1 Retest</b> (MR, 3yr: 70% win, +25% CAGR, -15% DD), '
+    +'<b>SW - Leader Dip Concentrated</b> (MR, 8yr: 70% win, +25% CAGR, -25% DD, survived 2018/2022 bears). '
+    +'All other screens still carry their real audit numbers below — no star just means they are outside the top 3, not that they are broken. '
     +'<br><br><b>What the columns mean.</b> '
     +'<b>Fam</b>: MR=mean-reversion (7d-high exit, cap 20, 4 ATR stop), TC=trend-continuation '
     +'(close&lt;21EMA trail, cap 60, 3 ATR stop), WL=watchlist. '

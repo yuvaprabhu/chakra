@@ -1,5 +1,28 @@
 # Chakra Terminal — project rules for Claude
 
+## Current goal (2026-09-27)
+
+Automate paper trading against the 3 whitelisted strategies for a few months
+and log every trade so we can review how they actually performed in live
+(walk-forward) conditions, not just in the historical audit.
+
+- Signal source: SW - Trend Stack, SW - Monthly R1 Retest, SW - Leader Dip
+  Concentrated. No others until we review the data.
+- Sizing: ₹1,00,000 per trade, `qty = floor(100000 / entry_price)`.
+- Execution: paper only. Nothing routes to a real broker. Trades exist as DB
+  records and chart markers.
+- Duplicate signals: if the same ISIN fires on two strategies same day,
+  keep exactly one trade (not two). Tie-break by highest historical win% —
+  fixed priority: Leader Dip Concentrated (70.3%) > Monthly R1 Retest (69.7%)
+  > Trend Stack (38.1%).
+- Slot cap: NONE. Every fresh signal on sync day gets a ₹1L trade,
+  regardless of how many other trades are open. This diverges from the
+  audit (which assumed 10 slots per screen) — the point of this run is to
+  learn how a no-cap version behaves in practice.
+- Entries fire ONLY on the day of sync (never backfilled). Pending T+1
+  entries queued on day T do execute at T+1's open even if T+1 is inside a
+  laptop-offline gap, and open trades replay stop/target across the gap.
+
 NSE end-of-day technical screener. Parquet store via DuckDB, adjusted (Upstox)
 basis, ISIN keys. The dashboard is a single-file HTML artifact; the daily
 pipeline is `scripts/daily_update.sh`.

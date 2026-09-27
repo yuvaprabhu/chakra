@@ -5,11 +5,28 @@ __pycache__/
 *.pyc
 .pytest_cache/
 .venv/
+coldstart.log
+run_coldstart.sh
 
-# Big files — shipped as GitHub Release assets, not tracked in git
-data/screen/features.parquet
-data/backtest_panels/bottom_panel.parquet
+# All fetched/derived market data — regenerable via `bash scripts/daily_update.sh`
+# Only `data/raw/index_catalog.csv` is tracked (stub required for export_dashboard.py).
+data/bars/
+data/minutes/
+data/meta/
+data/screen/
+data/raw/all_nse_mcap.parquet
+data/raw/indices_daily.parquet
+data/raw/upstox_nse_instruments.csv
+data/raw/ind_*.csv
+data/raw/*.parquet
+data/universe/*.parquet
+data/backtest_panels/
 
-# Local secrets
+# Dashboard JSON shards — regenerable via `python3 scripts/export_dashboard.py`
+dashboard/data.json
+dashboard/series_*.json
+dashboard/hourly_*.json
+
+# Local secrets — NEVER commit
 .env
 *.token

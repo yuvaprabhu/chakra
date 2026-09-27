@@ -33,6 +33,11 @@ Run:    python scripts/bottom_lab.py --build      (panel cache, ~5 min)
         python scripts/bottom_lab.py --window ext | --window recent
 """
 import json, sys, time, itertools, os, argparse
+import multiprocessing as _mp
+try:
+    _mp.set_start_method("fork", force=True)
+except RuntimeError:
+    pass
 from multiprocessing import Pool
 from pathlib import Path
 sys.path.insert(0, ".")
@@ -43,7 +48,7 @@ ap.add_argument("--build", action="store_true")
 ap.add_argument("--check", action="store_true", help="engine validation + sanity trades only")
 ap.add_argument("--window", default="both", choices=["both", "ext", "recent"])
 ap.add_argument("--panel", default=os.environ.get("BOTTOM_LAB_PANEL",
-                "/tmp/claude-0/-home-user/397386f6-c392-5ccc-b9f1-52240babee74/scratchpad/bl/bottom_panel.parquet"))
+                "data/backtest_panels/bottom_panel.parquet"))
 ap.add_argument("--procs", type=int, default=4)
 ARGS = ap.parse_args()
 

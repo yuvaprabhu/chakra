@@ -28,7 +28,10 @@ end = pd.Timestamp.today().normalize()
 isins = universe_isins(store, a.min_mcap_cr)
 print(f"universe at Rs {a.min_mcap_cr:,.0f} Cr: {len(isins)} names", flush=True)
 
-counts = store.query("SELECT isin, count(*) n FROM bars GROUP BY isin").set_index("isin")["n"]
+try:
+    counts = store.query("SELECT isin, count(*) n FROM bars GROUP BY isin").set_index("isin")["n"]
+except Exception:
+    counts = pd.Series(dtype=int)
 need = [i for i in isins if counts.get(i, 0) < MIN_HISTORY_BARS]
 print(f"daily: {len(need)} name(s) below {MIN_HISTORY_BARS} bars", flush=True)
 t0 = time.time()
