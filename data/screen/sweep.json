@@ -1,0 +1,72 @@
+{
+ "52w_proximity": {
+  "best": {
+   "p": 12.0,
+   "q": 80.0
+  },
+  "is_exp": -0.003,
+  "oos_exp": 0.022,
+  "oos_n": 31093,
+  "oos_pf": 1.06,
+  "cells": 12,
+  "rank": 1,
+  "pos": 2,
+  "median_oos": -0.022
+ },
+ "held_breakout": {
+  "best": {
+   "p": 8.0,
+   "q": 2.0
+  },
+  "is_exp": 0.573,
+  "oos_exp": -0.141,
+  "oos_n": 164,
+  "oos_pf": 0.77,
+  "cells": 16,
+  "rank": 16,
+  "pos": 5,
+  "median_oos": -0.0395
+ },
+ "ema21_pullback": {
+  "best": {
+   "p": 12.0,
+   "q": 6.0
+  },
+  "is_exp": 0.052,
+  "oos_exp": 0.109,
+  "oos_n": 2109,
+  "oos_pf": 1.21,
+  "cells": 12,
+  "rank": 1,
+  "pos": 8,
+  "median_oos": 0.018500000000000003
+ },
+ "rsi2_reversion": {
+  "best": {
+   "p": 2.0,
+   "q": 2.0
+  },
+  "is_exp": 0.106,
+  "oos_exp": 0.042,
+  "oos_n": 550,
+  "oos_pf": 1.2,
+  "cells": 12,
+  "rank": 11,
+  "pos": 12,
+  "median_oos": 0.0645
+ },
+ "spring_reclaim": {
+  "best": {
+   "p": 1.0,
+   "q": 1.5
+  },
+  "is_exp": 0.341,
+  "oos_exp": -0.119,
+  "oos_n": 315,
+  "oos_pf": 0.79,
+  "cells": 8,
+  "rank": 6,
+  "pos": 0,
+  "median_oos": -0.061
+ }
+}

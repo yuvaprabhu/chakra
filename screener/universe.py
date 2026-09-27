@@ -68,8 +68,8 @@ def parse_constituents_csv(
 ) -> pd.DataFrame:
     """Parse an NSE ``ind_nifty500list.csv`` into (isin, symbol, name, series, industry).
 
-    Rows whose ISIN is not a real equity ISIN are dropped and left on
-    ``df.attrs["excluded"]`` rather than failing the load — NSE routinely ships
+    Rows whose ISIN is not a real equity ISIN are dropped and listed on
+    ``df.attrs["excluded"]`` (as records) rather than failing the load — NSE routinely ships
     one or two placeholder rows and a screener that refuses to start on a
     normal trading day is worse than one that skips a dummy. Pass ``strict`` to
     raise instead.
@@ -106,7 +106,10 @@ def parse_constituents_csv(
     if index_name is not None:
         out.insert(0, "index_name", index_name)
     out = out.reset_index(drop=True)
-    out.attrs["excluded"] = excluded
+    # Records, not a DataFrame: pandas compares .attrs when concatenating and a
+    # DataFrame there raises "truth value is ambiguous", which breaks any
+    # concat of parsed constituent lists.
+    out.attrs["excluded"] = excluded.to_dict("records")
     return out
 
 

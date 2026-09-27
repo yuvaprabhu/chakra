@@ -31,6 +31,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import pandas as pd
+from urllib.parse import quote
 import requests
 
 from . import schema as S
@@ -79,6 +80,15 @@ def load_instruments(path: str | Path | None = None, *, download: bool = False) 
     # Equity ISINs start INE/INF; IN0/IN2/IN9 are SDLs, T-bills and other debt
     # that NSE lists in the same segment.
     eq = eq[eq["isin"].str.match(r"^IN[EF][A-Z0-9]{9}$", na=False)]
+    # Corporate bonds carry an INE ISIN too, so the ISIN test alone lets ~1,500
+    # of them through. Their tickers encode a coupon and so begin with a digit
+    # (737IRFC29, 805ABCL28); no equity ticker does.
+    eq = eq[~eq["tradingsymbol"].str.match(r"^\d", na=False)]
+    # Characters 8-9 of an Indian ISIN are the security type: 01-06 are equity
+    # classes, 07 upwards are debt. Without this, a bond listed under the
+    # company's own ticker (MOTHERSON -> INE775A08105) masquerades as the share
+    # and its ISIN never matches the one NSE uses in its index files.
+    eq = eq[eq["isin"].str[7:9].isin({"01", "02", "03", "04", "05", "06"})]
     return eq[["isin", "instrument_key", "tradingsymbol", "name"]].reset_index(drop=True)
 
 
@@ -472,4 +482,53 @@ def backfill_minutes(
             if on_month:
                 on_month(key, rows, stats)
         cur = (cur + pd.offsets.MonthBegin(1)).normalize()
+    return out
+
+# --- today (intraday endpoint) ----------------------------------------------
+# The historical endpoint stops at the previous session. Today's candles live
+# on a separate intraday endpoint, both as one daily bar and as minutes.
+INTRADAY_BASE = "https://api.upstox.com/v3/historical-candle/intraday"
+
+
+def fetch_today(client: "UpstoxClient", isin: str, unit: str) -> pd.DataFrame:
+    """Today's candles for one symbol: unit 'days' -> one bar, 'minutes' -> 1-min bars."""
+    url = f"{INTRADAY_BASE}/{quote(instrument_key(isin), safe='')}/{unit}/1"
+    resp = client.session.get(url, timeout=client.timeout)
+    if resp.status_code != 200:
+        raise UpstoxError(f"{resp.status_code} for {url}")
+    payload = resp.json()
+    if payload.get("status") != "success":
+        raise UpstoxError(f"upstream status {payload.get('status')} for {url}")
+    return candles_to_frame(payload["data"].get("candles", []), isin)
+
+
+def ingest_today(store: Store, isins: list[str], *, client: "UpstoxClient | None" = None,
+                 workers: int = 12) -> dict:
+    """Write today's daily bar (adjusted block) and minute bars for every symbol."""
+    client = client or UpstoxClient()
+    daily, mins, errors = [], [], 0
+    def one(isin):
+        d = fetch_today(client, isin, "days"); m = fetch_today(client, isin, "minutes")
+        return isin, d, m
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        for fut in as_completed([pool.submit(one, i) for i in isins]):
+            try:
+                isin, d, m = fut.result()
+            except Exception as exc:
+                errors += 1; log.warning("today fetch failed: %s", exc); continue
+            if len(d):
+                daily.append(pd.DataFrame({"isin": d["isin"], "date": d["ts"].dt.normalize(),
+                    "adj_open": d["open"], "adj_high": d["high"], "adj_low": d["low"], "adj_close": d["close"],
+                    "volume": d["volume"], "adj_source": "upstox"}))
+            if len(m):
+                mins.append(pd.DataFrame({"isin": m["isin"], "ts": m["ts"], "open": m["open"], "high": m["high"],
+                    "low": m["low"], "close": m["close"], "volume": m["volume"], "source": "upstox"}))
+    out = {"symbols": len(isins), "errors": errors, "daily_rows": 0, "minute_rows": 0}
+    if daily:
+        df = pd.concat(daily, ignore_index=True)
+        clean, bad = split_invalid(df, OHLC_ADJ)
+        store.write_bars(clean); out["daily_rows"] = len(clean); out["quarantined"] = len(bad)
+    if mins:
+        res = store.write_minutes(pd.concat(mins, ignore_index=True), replace_month=False)
+        out["minute_rows"] = res.total
     return out

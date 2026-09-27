@@ -257,3 +257,19 @@ class TestMinuteHistoryBound:
         for url in c.session.urls:
             tail = url.rsplit("/", 1)[-1]
             assert pd.Timestamp(tail) >= MINUTE_HISTORY_START
+
+
+class TestInstrumentFilter:
+    def test_drops_corporate_bonds(self, tmp_path):
+        """Bonds carry INE ISINs like equities; their tickers begin with the
+        coupon, which no equity ticker does."""
+        csv = tmp_path / "inst.csv"
+        csv.write_text(
+            "instrument_key,exchange_token,tradingsymbol,name,last_price,expiry,strike,"
+            "tick_size,lot_size,instrument_type,option_type,exchange\n"
+            "NSE_EQ|INE002A01018,1,RELIANCE,Reliance,0,,,0.05,1,EQUITY,,NSE_EQ\n"
+            "NSE_EQ|INE053F01010,2,737IRFC29,IRFC 7.37% 2029,0,,,0.05,1,EQUITY,,NSE_EQ\n"
+            "NSE_EQ|IN2920250163,3,749RJ35,SDL RJ,0,,,0.01,100,EQUITY,,NSE_EQ\n"
+        )
+        out = load_instruments(csv)
+        assert out["tradingsymbol"].tolist() == ["RELIANCE"]

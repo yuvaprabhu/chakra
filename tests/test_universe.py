@@ -47,7 +47,17 @@ class TestParseConstituents:
         text = CSV + "Dummy HEG Ltd.,Metals & Mining,DUMMYHEG,EQ,DUM545A01024\n"
         df = parse_constituents_csv(io.StringIO(text))
         assert len(df) == 3
-        assert df.attrs["excluded"].iloc[0]["symbol"] == "DUMMYHEG"
+        assert df.attrs["excluded"] == [{"isin": "DUM545A01024", "symbol": "DUMMYHEG",
+                                 "name": "Dummy HEG Ltd.", "series": "EQ",
+                                 "industry": "Metals & Mining"}]
+
+    def test_excluded_attrs_survive_concat(self):
+        """Regression: a DataFrame on .attrs makes pd.concat raise, which breaks
+        loading several index lists at once."""
+        text = CSV + "Dummy HEG Ltd.,Metals & Mining,DUMMYHEG,EQ,DUM545A01024\n"
+        a = parse_constituents_csv(io.StringIO(text))
+        b = parse_constituents_csv(io.StringIO(text))
+        assert len(pd.concat([a, b], ignore_index=True)) == 6
 
     def test_strict_mode_raises_instead(self):
         text = CSV + "Dummy HEG Ltd.,Metals & Mining,DUMMYHEG,EQ,DUM545A01024\n"

@@ -1,134 +1,185 @@
-# NSE 500 Technical Screener — stages 1 & 2
+# Chakra Terminal — NSE technical screener
 
-Storage, symbol master, and ingestion. Indicators, rules, quality gates and the
-backtest harness are not built yet: stage 3 (corporate action adjustment) is the
-next one and is deliberately not started.
+End-of-day technical screener for NSE equities. Adjusted (Upstox) basis,
+DuckDB/parquet store, ISIN keys. Ships with a single-file HTML dashboard
+(`dashboard/index.html`) that renders 40+ swing/momentum/mean-reversion
+screens plus a full strategy audit portfolio.
+
+Live dashboard (private artifact): https://claude.ai/artifact/4XaB2txyq2RhRh1b3xe2Yu
+
+---
+
+## What's in this repo
+
+```
+nse-screener/
+├── screener/           Core library: schema, store, indicators, rules engine,
+│                       market gate, portfolio, quality gate
+├── scripts/            60+ CLI scripts:
+│   ├── daily_update.sh   the daily pipeline (fetch → screen → export → publish)
+│   ├── run_screen.py     compute features + evaluate every rule
+│   ├── strategy_audit.py THE source of truth for real-money edge per screen
+│   ├── export_dashboard.py builds dashboard/data.json + series/hourly shards
+│   ├── volume_lab.py, bottom_lab.py, harden_playbook.py … research labs
+│   └── (many more, mostly historical studies)
+├── config/rules.yaml   Every screen: expression, description, why, manage text
+├── tests/              15 test modules, ~120 tests, network-blocked in CI
+├── dashboard/          Single-file HTML app + JSON data shards + charts lib
+├── data/
+│   ├── bars/           Daily OHLC per year (81MB)
+│   ├── raw/            Bhavcopy dumps, corporate actions, instrument master
+│   ├── universe/       Point-in-time index constituents
+│   ├── meta/           Quarantine log, ingest attempts
+│   ├── screen/         Feature panel + all screen outputs + audit JSONs
+│   └── backtest_panels/ Extended 8-year panel for strategy_audit.py (485MB)
+├── CLAUDE.md           15 lessons from backtesting mistakes — READ FIRST
+└── requirements.txt    Python deps (pandas, pyarrow, duckdb, requests, pyyaml…)
+```
+
+Not included in this tarball (regeneratable):
+- `data/minutes/` — 2GB of 1-minute bars (rebuild with `scripts/backfill_minutes.py`)
+- `logs/`, `__pycache__/`, `.pytest_cache/`
+
+---
+
+## Getting it running locally
+
+**Prerequisites**
+- Python 3.11 (or 3.10+)
+- `pip install -r requirements.txt`
+- An Upstox API access token (for daily data refresh — not needed to just
+  explore what's already in the tarball). Set `UPSTOX_ACCESS_TOKEN` env var.
+
+**Just look at what's here (no refresh):**
+```bash
+tar -xzf nse-screener-full.tar.gz
+cd nse-screener
+python3 -m http.server 8000 --directory dashboard
+# open http://localhost:8000 in a browser
+```
+The dashboard loads with today's screens, portfolio audit, backtest views.
+
+**Refresh with today's data:**
+```bash
+export UPSTOX_ACCESS_TOKEN="…"
+bash scripts/daily_update.sh
+```
+This: pulls today's bars → recomputes features → evaluates all rules →
+exports dashboard JSON.
+
+**Re-run the strategy audit (real-money source of truth):**
+```bash
+python3 scripts/strategy_audit.py
+```
+Uses `data/backtest_panels/bottom_panel.parquet` (8yr) + `data/screen/features.parquet`
+(3yr) → writes `data/screen/strategy_audit.json`. Takes ~5 min.
+
+**Run tests:**
+```bash
+python3 -m pytest
+```
+
+---
+
+## Key files by purpose
+
+### The data
+- `data/screen/features.parquet` — 1.05M rows × ~80 columns. Every stock, every
+  day, ~3 years back. Every indicator (SMA/EMA/RSI/ATR/Bollinger/pivots/CPR/RS).
+  Every screen queries this file. **This is the master data source.**
+- `data/screen/latest_features.parquet` — the most recent day sliced out.
+- `data/screen/hits.parquet` — which stocks matched which screens today.
+- `data/screen/gate_r3.parquet` — daily market gate (breadth + Zweig thrust).
+- `data/screen/market_state.parquet` — 74 daily market features.
+- `data/screen/trades_tagged.parquet` — 34,857 historical trades for loss forensics.
+- `data/backtest_panels/bottom_panel.parquet` — 2.5M rows, 2017-2026, extended
+  panel with market gate baked in for the strategy audit.
+
+### The screens
+- `config/rules.yaml` — 40+ rules. Each has a df.eval expression, description,
+  `why` (rationale), `manage` (execution text with stop/exit rules).
+- Prefixes:
+  - `SW - …` = swing-lab-validated, hard stops, tradeable
+  - `VL - …` = volume-lab, breakout/spring family
+  - no prefix = watchlist / reference / legacy
+
+### The audit
+- `scripts/strategy_audit.py` — for every tradeable rule: contamination drop,
+  shipped features only, fresh-event detection (20 quiet), family-matched
+  exit, close-based ATR stop from fill, 10-slot concurrent portfolio,
+  0.50% RT cost, daily equity mark-to-market. Writes to
+  `data/screen/strategy_audit.json`. The Portfolio tab of the dashboard
+  renders this exact file.
+
+### The dashboard
+- `dashboard/index.html` — single-file app. Reads `data.json` + `series_*.json`
+  + `hourly_*.json`. Views: Market, Screens, Chart, Money Flow, Watchlist,
+  **Backtest → Portfolio** (the star-rated audit), Console.
+- `scripts/export_dashboard.py` — builds all the JSON shards from parquet.
+
+---
+
+## Reading `CLAUDE.md` before making changes
+
+15 hard-won lessons from real backtesting mistakes. The critical ones:
+- **#1** Match EXIT to SETUP FAMILY (mean-reversion vs trend-continuation).
+- **#2** Test on the FULL 8-year panel, not just the recent window.
+- **#7** Close-based ATR stop, always — wicks are false shakeouts.
+- **#13** Max DD from DAILY equity mark-to-market, not event-time compounding.
+- **#14** Grooming numbers in `rules.yaml` are STALE; `strategy_audit.json`
+  is the real-money source of truth.
+- **#15** Setup family and exit mechanic must not fight each other.
+
+Do not ship a new screen without an audit entry.
+
+---
 
 ## Data sources
 
-Two providers, deliberately. Neither one alone is sufficient.
+Two providers, deliberately:
+- **Upstox historical-candle API** — back-adjusted daily + 1-minute bars.
+  Needs `UPSTOX_ACCESS_TOKEN`. Provides the adjusted OHLC block.
+- **NSE UDiFF bhavcopy** — raw (unadjusted) daily bars. No auth but needs a
+  warmed cookie. Provides the raw OHLC block used for pivots and CPR.
 
-| | Upstox historical-candle | NSE UDiFF bhavcopy |
-|---|---|---|
-| Fills | `adj_*` block + all minute bars | raw `open/high/low/close` |
-| Prices | **back-adjusted** for splits/bonuses | **raw** — what the chart showed |
-| Auth | none | none, but needs a warmed cookie |
-| Daily history | 2000-01-03 onwards | day-by-day from ingest |
-| Minute history | Jan 2022 onwards, 375/session | n/a |
-| Reliability here | excellent | intermittent (Akamai) |
-| Key | ISIN-native (`NSE_EQ\|INE002A01018`) | ISIN column |
+Where a bar has both, `close / adj_close` = the empirical cumulative
+adjustment factor (used to reconstruct historical raw prices).
 
-**Why both.** Upstox is back-adjusted — verified against Reliance's 1:1 bonus
-(ex-date 2024-10-28), where a raw series must show a ~50% gap and this one does
-not. Adjusted prices are right for moving averages, Bollinger, RSI and ATR, and
-wrong for pivots and CPR: after a corporate action, a monthly CPR built from
-adjusted bars is off against an unadjusted close by exactly the split factor.
-So raw prices come from the bhavcopy and the two land in the same row.
+Rejected: Kite Connect (₹2000/mo + daily token, no benefit), yfinance
+(1-minute is only last 7 days).
 
-Where a bar carries both blocks, `close / adj_close` **is** the cumulative
-adjustment factor for that date. Stage 3 gets an empirical factor curve rather
-than a modelled one.
+---
 
-**They agree.** Across 11,500 overlapping bars the two providers match to the
-last decimal on 99.66% of them, and every deviation falls on the current
-trading day — the Upstox candle for today is provisional, while the bhavcopy
-close is the official NSE figure (a 30-minute VWAP, not the last traded price).
+## Universe
 
-Rejected: **Kite Connect** (₹2000/mo plus a daily token, no benefit here);
-**yfinance** (1-minute data only for the last 7 days).
+- Today's NSE equities with own market cap ≥ ₹1,000 Cr
+  (`MCAP_FLOOR_CR` env, default 1000). About 1,474 names as of Sep 2026.
+- Point-in-time index membership (`screener/universe.py`) — applying today's
+  rebalance never changes what `members_on(<past_date>)` returns.
 
-## Layout
+---
 
-```
-screener/
-  schema.py     canonical column schemas and dtype coercion
-  store.py      parquet/duckdb, bars partitioned by year, minutes by year/month
-  universe.py   index constituents, ISIN mapping, membership history
-  fetch.py      NSE bhavcopy session, UDiFF parsing, gap-filling backfill
-  upstox.py     Upstox provider: adjusted daily + 1-minute candles
-scripts/
-  backfill_daily.py       adjusted daily history for an index universe
-  backfill_minutes.py     1-minute history, month by month
-  ingest_bhavcopy.py      raw daily bars for a date range
-  inspect_data.py         read-only data report (start here)
-tests/
-```
+## Design notes (from stage 1-2, still true)
 
-## What is loaded
+- **Everything is keyed on ISIN.** Symbols get renamed and reused.
+- **Writes are column-wise upserts.** Nulls don't overwrite stored values;
+  the raw and adjusted legs can arrive in any order.
+- **Ingestion is idempotent and gap-filling.** Every (date, source) attempt
+  is logged. A holiday records `no_data` and never retries.
+- **Bad rows are quarantined, not dropped.** `high < low`, non-positive
+  prices, wrapped signed volumes, placeholder demerger ISINs — all parked
+  in `meta/quarantine.parquet` with a reason.
 
-| | |
-|---|---|
-| Daily bars | 1,945,279 rows · 2,959 ISINs · 2000-01-03 → 2026-09-18 · 6,643 sessions |
-| Minute bars | 92,267,587 rows · 500 symbols · 2024-09 → 2026-09 · 1.2 GB |
-| Universe | Nifty 500, point-in-time membership |
-| Quarantined | 556 daily bars the store refused |
+## Real data defects handled (with regression tests)
+- Zero-price bars (529 bars, mostly 2003-04) → quarantined
+- Frozen quotes on halted stocks (27 bars) → quarantined
+- Signed 32-bit volume overflow (IDEA 2024-08-30: -81M → +4.2B) → repaired
+- Placeholder constituents during demergers (`Dummy HEG Ltd.`) → quarantined
+- NSE Akamai 200-with-HTML "Access Denied" → treated as error, not data
+- Muhurat trading (18:00-18:59 evening session) → recognized
 
-```bash
-python3 scripts/inspect_data.py     # full report
-python3 -m pytest                   # 121 tests, network hard-blocked
-```
+---
 
-## Design notes
+## License
 
-**Everything is keyed on ISIN.** Symbols get renamed and reused; keying on the
-symbol splits one stock's history into two series and silently merges two
-stocks into one. Live data already contains five symbols mapped to more than
-one ISIN — `Universe.reused_symbols()` surfaces them instead of merging them.
-
-**Membership is point-in-time.** A membership row is a half-open interval
-`[from_date, to_date)`, so applying today's rebalance cannot change what
-`members_on` returns for a past date. Screening today's Nifty 500 over 2018 is
-survivorship-biased fiction, and this is the guard against it.
-
-**Writes are column-wise upserts.** A null in an incoming frame leaves the
-stored value alone, which is what lets the raw and adjusted legs arrive in any
-order from two independent jobs without either erasing the other. `volume` is a
-nullable `Int64` for the same reason: `0` is a real value and would win a merge
-against a stored `1000`.
-
-**Ingestion is idempotent and gap-filling.** Every `(date, source)` attempt is
-logged. A holiday records `no_data` and is never retried; a network failure
-records `error` and stays a gap. Gap detection asks whether the *raw* block is
-present, not whether any bar exists — otherwise the Upstox backfill (which
-covers every date since 2000) would mask every missing bhavcopy.
-
-**The store is a hard gate; bad rows are quarantined, not dropped.** Validation
-rejects `high < low`, non-positive prices, open/close outside the high/low
-range, duplicate keys and negative volume. Rows that fail are parked in
-`meta/quarantine.parquet` with a reason, because a screener that quietly
-discards bad bars is indistinguishable from one that never saw them.
-
-## Real data defects found and handled
-
-Each of these came out of live data and has a regression test.
-
-- **Zero-price bars.** 529 bars print `0.00` OHLC with non-zero volume, mostly
-  2003–04. Quarantined.
-- **Frozen quotes on halted stocks.** 27 bars carry a settlement close outside
-  the traded high/low range. Quarantined.
-- **Signed 32-bit volume overflow.** IDEA on 2024-08-30 reports
-  `-81,259,413`; the true figure is `4,213,707,883`, which wrapped past 2³¹.
-  Repaired by adding 2³², and only where the result becomes positive.
-- **Placeholder constituents.** NSE ships rows such as `Dummy HEG Ltd.` with
-  ISIN `DUM545A01024` during demergers. Quarantined rather than fatal — a
-  screener that refuses to start on a normal trading day is worse.
-- **Akamai 200-with-HTML.** NSE serves an "Access Denied" page with HTTP 200.
-  Treated as an error, not as data.
-- **Muhurat trading.** 2024-11-01 has a single 60-minute evening session at
-  18:00–18:59 IST. Genuine NSE behaviour: any "375 candles per day" quality
-  gate must special-case it.
-
-## Known limitations
-
-- **Raw prices exist only for dates the bhavcopy was ingested.** Historical raw
-  OHLC is absent before that. Stage 3 is where it gets reconstructed by
-  un-adjusting, using the empirical `close / adj_close` factor curve.
-- **NSE is intermittent from a datacenter IP.** The retry and cookie re-warm
-  recover most of the time; failed days stay gaps and are retried next run. It
-  is reliable from a residential IP.
-- **Minute bars are back-adjusted**, since that is what Upstox serves. They
-  have no raw counterpart.
-- **No trading-holiday calendar yet.** `expected_sessions` uses weekdays, which
-  over-estimates. That is the safe direction: a spurious candidate date costs
-  one 404, a missed one is a silent gap.
-- **Today's adjusted bar is provisional** until the session settles.
+Personal use. Not for redistribution.

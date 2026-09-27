@@ -113,6 +113,21 @@ SYMBOL_HISTORY_DTYPES: dict[str, str] = {
 }
 SYMBOL_HISTORY_COLUMNS = list(SYMBOL_HISTORY_DTYPES)
 
+# --- fundamentals (shares outstanding -> market cap) -----------------------
+
+# Shares outstanding move only on corporate actions, so they are fetched rarely
+# and cached. Market cap is derived as shares x our own close rather than taken
+# from the vendor, so the cap agrees with every other price on the screen.
+FUNDAMENTALS_DTYPES: dict[str, str] = {
+    "isin": "string",
+    "symbol": "string",
+    "shares": "float64",
+    "vendor_mcap": "float64",
+    "source": "string",
+    "fetched_at": "datetime64[ns]",
+}
+FUNDAMENTALS_COLUMNS = list(FUNDAMENTALS_DTYPES)
+
 # --- index membership ------------------------------------------------------
 
 # Half-open interval [from_date, to_date): a name is a member on date d when

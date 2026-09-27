@@ -1,9 +1,15 @@
-data/bars/
+# Ephemeral / regeneratable
 data/minutes/
-data/meta/
-data/universe/
-data/raw/
 logs/
 __pycache__/
 *.pyc
 .pytest_cache/
+.venv/
+
+# Big files — shipped as GitHub Release assets, not tracked in git
+data/screen/features.parquet
+data/backtest_panels/bottom_panel.parquet
+
+# Local secrets
+.env
+*.token

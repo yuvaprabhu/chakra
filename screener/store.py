@@ -499,6 +499,19 @@ class Store:
             name="status",
         ).astype("string").sort_index()
 
+    @property
+    def fundamentals_path(self) -> Path:
+        return self.meta_dir / "fundamentals.parquet"
+
+    def read_fundamentals(self) -> pd.DataFrame:
+        return self._read_table(self.fundamentals_path, S.FUNDAMENTALS_DTYPES)
+
+    def write_fundamentals(self, df: pd.DataFrame) -> WriteResult:
+        new = S.coerce(df, S.FUNDAMENTALS_DTYPES)
+        merged, ins, upd = _upsert(self.read_fundamentals(), new, ["isin"])
+        self._write_table(self.fundamentals_path, merged, S.FUNDAMENTALS_DTYPES)
+        return WriteResult(ins, upd, ())
+
     # --- quarantine --------------------------------------------------------
 
     @property

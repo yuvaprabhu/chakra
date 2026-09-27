@@ -1,0 +1,2764 @@
+[
+  {
+    "name": "episodic_pivot",
+    "title": "Episodic Pivot",
+    "family": "trend_continuation",
+    "coverage": "3yr",
+    "start_date": "2023-06-13",
+    "end_date": "2026-09-25",
+    "n_signals_raw": 860,
+    "n_signals_fresh": 798,
+    "n_signals_taken": 313,
+    "win_pct": 37.81,
+    "mean_ret_pct": 2.042,
+    "median_ret_pct": -3.616,
+    "stopped_pct": 10.8,
+    "capped_pct": 3.27,
+    "equity_multiplier": 2.829,
+    "cagr_pct": 40.8,
+    "max_dd_pct": -22.36,
+    "worst_year": {
+      "year": 2025,
+      "ret_pct": 11.71,
+      "max_dd_pct": -17.1
+    },
+    "best_year": {
+      "year": 2023,
+      "ret_pct": 50.1
+    },
+    "by_year": [
+      {
+        "year": 2023,
+        "n_signals": 96,
+        "n_taken": 31,
+        "win_pct": 57.29,
+        "ret_pct": 50.1,
+        "max_dd_pct": -5.85
+      },
+      {
+        "year": 2024,
+        "n_signals": 260,
+        "n_taken": 99,
+        "win_pct": 36.15,
+        "ret_pct": 22.4,
+        "max_dd_pct": -13.98
+      },
+      {
+        "year": 2025,
+        "n_signals": 209,
+        "n_taken": 107,
+        "win_pct": 35.41,
+        "ret_pct": 11.71,
+        "max_dd_pct": -17.1
+      },
+      {
+        "year": 2026,
+        "n_signals": 231,
+        "n_taken": 76,
+        "win_pct": 33.77,
+        "ret_pct": 37.87,
+        "max_dd_pct": -15.06
+      }
+    ],
+    "exit_family": "ema21",
+    "stop_atr_mult": 3.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "near_52w_high",
+    "title": "Holding the 52-Week High",
+    "family": "trend_continuation",
+    "coverage": "8yr",
+    "start_date": "2017-01-02",
+    "end_date": "2026-09-22",
+    "n_signals_raw": 244060,
+    "n_signals_fresh": 7199,
+    "n_signals_taken": 1150,
+    "win_pct": 35.37,
+    "mean_ret_pct": 2.301,
+    "median_ret_pct": -3.0,
+    "stopped_pct": 4.66,
+    "capped_pct": 2.99,
+    "equity_multiplier": 8.148,
+    "cagr_pct": 27.73,
+    "max_dd_pct": -48.32,
+    "worst_year": {
+      "year": 2018,
+      "ret_pct": -34.19,
+      "max_dd_pct": -37.77
+    },
+    "best_year": {
+      "year": 2021,
+      "ret_pct": 152.91
+    },
+    "by_year": [
+      {
+        "year": 2018,
+        "n_signals": 670,
+        "n_taken": 165,
+        "win_pct": 21.79,
+        "ret_pct": -34.19,
+        "max_dd_pct": -37.77
+      },
+      {
+        "year": 2019,
+        "n_signals": 527,
+        "n_taken": 146,
+        "win_pct": 29.41,
+        "ret_pct": 0.86,
+        "max_dd_pct": -15.2
+      },
+      {
+        "year": 2020,
+        "n_signals": 715,
+        "n_taken": 108,
+        "win_pct": 42.24,
+        "ret_pct": 42.59,
+        "max_dd_pct": -19.15
+      },
+      {
+        "year": 2021,
+        "n_signals": 899,
+        "n_taken": 95,
+        "win_pct": 41.94,
+        "ret_pct": 152.91,
+        "max_dd_pct": -14.48
+      },
+      {
+        "year": 2022,
+        "n_signals": 799,
+        "n_taken": 146,
+        "win_pct": 31.04,
+        "ret_pct": 15.7,
+        "max_dd_pct": -21.04
+      },
+      {
+        "year": 2023,
+        "n_signals": 962,
+        "n_taken": 108,
+        "win_pct": 44.59,
+        "ret_pct": 124.07,
+        "max_dd_pct": -13.61
+      },
+      {
+        "year": 2024,
+        "n_signals": 1061,
+        "n_taken": 132,
+        "win_pct": 34.87,
+        "ret_pct": 16.91,
+        "max_dd_pct": -20.55
+      },
+      {
+        "year": 2025,
+        "n_signals": 839,
+        "n_taken": 149,
+        "win_pct": 32.42,
+        "ret_pct": -3.4,
+        "max_dd_pct": -27.02
+      },
+      {
+        "year": 2026,
+        "n_signals": 723,
+        "n_taken": 101,
+        "win_pct": 34.02,
+        "ret_pct": 16.27,
+        "max_dd_pct": -18.14
+      }
+    ],
+    "exit_family": "ema21",
+    "stop_atr_mult": 3.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "trend_stack_swing",
+    "title": "SW - Trend Stack",
+    "family": "trend_continuation",
+    "coverage": "3yr",
+    "start_date": "2023-06-13",
+    "end_date": "2026-09-25",
+    "n_signals_raw": 676,
+    "n_signals_fresh": 654,
+    "n_signals_taken": 106,
+    "win_pct": 38.07,
+    "mean_ret_pct": 3.467,
+    "median_ret_pct": -1.499,
+    "stopped_pct": 0.46,
+    "capped_pct": 2.29,
+    "equity_multiplier": 1.639,
+    "cagr_pct": 26.22,
+    "max_dd_pct": -14.44,
+    "worst_year": {
+      "year": 2025,
+      "ret_pct": 11.42,
+      "max_dd_pct": -4.56
+    },
+    "best_year": {
+      "year": 2026,
+      "ret_pct": 28.78
+    },
+    "by_year": [
+      {
+        "year": 2024,
+        "n_signals": 266,
+        "n_taken": 36,
+        "win_pct": 44.74,
+        "ret_pct": 14.27,
+        "max_dd_pct": -6.82
+      },
+      {
+        "year": 2025,
+        "n_signals": 102,
+        "n_taken": 23,
+        "win_pct": 39.22,
+        "ret_pct": 11.42,
+        "max_dd_pct": -4.56
+      },
+      {
+        "year": 2026,
+        "n_signals": 286,
+        "n_taken": 47,
+        "win_pct": 31.47,
+        "ret_pct": 28.78,
+        "max_dd_pct": -14.44
+      }
+    ],
+    "exit_family": "ema21",
+    "stop_atr_mult": 3.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "trend_stack",
+    "title": "Full Trend Stack",
+    "family": "trend_continuation",
+    "coverage": "3yr",
+    "start_date": "2023-06-13",
+    "end_date": "2026-09-25",
+    "n_signals_raw": 109970,
+    "n_signals_fresh": 4639,
+    "n_signals_taken": 426,
+    "win_pct": 27.41,
+    "mean_ret_pct": 0.154,
+    "median_ret_pct": -2.486,
+    "stopped_pct": 0.58,
+    "capped_pct": 2.18,
+    "equity_multiplier": 1.755,
+    "cagr_pct": 25.78,
+    "max_dd_pct": -30.54,
+    "worst_year": {
+      "year": 2025,
+      "ret_pct": 1.35,
+      "max_dd_pct": -27.71
+    },
+    "best_year": {
+      "year": 2024,
+      "ret_pct": 45.92
+    },
+    "by_year": [
+      {
+        "year": 2024,
+        "n_signals": 1886,
+        "n_taken": 126,
+        "win_pct": 29.22,
+        "ret_pct": 45.92,
+        "max_dd_pct": -16.69
+      },
+      {
+        "year": 2025,
+        "n_signals": 1459,
+        "n_taken": 183,
+        "win_pct": 24.19,
+        "ret_pct": 1.35,
+        "max_dd_pct": -27.71
+      },
+      {
+        "year": 2026,
+        "n_signals": 1288,
+        "n_taken": 117,
+        "win_pct": 28.42,
+        "ret_pct": 18.67,
+        "max_dd_pct": -16.76
+      }
+    ],
+    "exit_family": "ema21",
+    "stop_atr_mult": 3.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "sw_leader_dip_concentrated",
+    "title": "SW - Leader Dip Concentrated",
+    "family": "mean_reversion",
+    "coverage": "8yr",
+    "start_date": "2017-01-02",
+    "end_date": "2026-09-22",
+    "n_signals_raw": 1564,
+    "n_signals_fresh": 1256,
+    "n_signals_taken": 938,
+    "win_pct": 70.3,
+    "mean_ret_pct": 2.355,
+    "median_ret_pct": 3.661,
+    "stopped_pct": 4.7,
+    "capped_pct": 9.87,
+    "equity_multiplier": 6.916,
+    "cagr_pct": 25.32,
+    "max_dd_pct": -25.34,
+    "worst_year": {
+      "year": 2018,
+      "ret_pct": -20.32,
+      "max_dd_pct": -21.24
+    },
+    "best_year": {
+      "year": 2023,
+      "ret_pct": 68.49
+    },
+    "by_year": [
+      {
+        "year": 2018,
+        "n_signals": 50,
+        "n_taken": 42,
+        "win_pct": 48.0,
+        "ret_pct": -20.32,
+        "max_dd_pct": -21.24
+      },
+      {
+        "year": 2019,
+        "n_signals": 57,
+        "n_taken": 57,
+        "win_pct": 63.16,
+        "ret_pct": 7.97,
+        "max_dd_pct": -7.71
+      },
+      {
+        "year": 2020,
+        "n_signals": 173,
+        "n_taken": 126,
+        "win_pct": 72.83,
+        "ret_pct": 49.08,
+        "max_dd_pct": -12.25
+      },
+      {
+        "year": 2021,
+        "n_signals": 256,
+        "n_taken": 146,
+        "win_pct": 64.45,
+        "ret_pct": 24.51,
+        "max_dd_pct": -18.37
+      },
+      {
+        "year": 2022,
+        "n_signals": 112,
+        "n_taken": 93,
+        "win_pct": 66.07,
+        "ret_pct": -1.82,
+        "max_dd_pct": -12.98
+      },
+      {
+        "year": 2023,
+        "n_signals": 151,
+        "n_taken": 132,
+        "win_pct": 78.15,
+        "ret_pct": 68.49,
+        "max_dd_pct": -5.82
+      },
+      {
+        "year": 2024,
+        "n_signals": 241,
+        "n_taken": 161,
+        "win_pct": 72.2,
+        "ret_pct": 44.5,
+        "max_dd_pct": -14.02
+      },
+      {
+        "year": 2025,
+        "n_signals": 103,
+        "n_taken": 84,
+        "win_pct": 74.76,
+        "ret_pct": 30.32,
+        "max_dd_pct": -4.92
+      },
+      {
+        "year": 2026,
+        "n_signals": 113,
+        "n_taken": 97,
+        "win_pct": 78.76,
+        "ret_pct": 39.02,
+        "max_dd_pct": -5.11
+      }
+    ],
+    "exit_family": "hi7",
+    "stop_atr_mult": 4.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "sw_monthly_r1_retest",
+    "title": "SW - Monthly R1 Retest",
+    "family": "mean_reversion",
+    "coverage": "3yr",
+    "start_date": "2023-06-13",
+    "end_date": "2026-09-25",
+    "n_signals_raw": 783,
+    "n_signals_fresh": 412,
+    "n_signals_taken": 308,
+    "win_pct": 69.66,
+    "mean_ret_pct": 1.827,
+    "median_ret_pct": 2.566,
+    "stopped_pct": 2.67,
+    "capped_pct": 8.01,
+    "equity_multiplier": 1.706,
+    "cagr_pct": 24.48,
+    "max_dd_pct": -14.76,
+    "worst_year": {
+      "year": 2025,
+      "ret_pct": 12.88,
+      "max_dd_pct": -3.23
+    },
+    "best_year": {
+      "year": 2024,
+      "ret_pct": 29.02
+    },
+    "by_year": [
+      {
+        "year": 2024,
+        "n_signals": 268,
+        "n_taken": 176,
+        "win_pct": 67.91,
+        "ret_pct": 29.02,
+        "max_dd_pct": -14.76
+      },
+      {
+        "year": 2025,
+        "n_signals": 36,
+        "n_taken": 36,
+        "win_pct": 77.78,
+        "ret_pct": 12.88,
+        "max_dd_pct": -3.23
+      },
+      {
+        "year": 2026,
+        "n_signals": 108,
+        "n_taken": 96,
+        "win_pct": 71.3,
+        "ret_pct": 17.17,
+        "max_dd_pct": -5.11
+      }
+    ],
+    "exit_family": "hi7",
+    "stop_atr_mult": 4.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "sw_rsi2_snapback",
+    "title": "SW - RSI(2) Snapback",
+    "family": "mean_reversion",
+    "coverage": "8yr",
+    "start_date": "2017-01-02",
+    "end_date": "2026-09-22",
+    "n_signals_raw": 7990,
+    "n_signals_fresh": 4429,
+    "n_signals_taken": 1363,
+    "win_pct": 68.91,
+    "mean_ret_pct": 2.028,
+    "median_ret_pct": 3.096,
+    "stopped_pct": 3.95,
+    "capped_pct": 9.91,
+    "equity_multiplier": 5.775,
+    "cagr_pct": 22.36,
+    "max_dd_pct": -31.63,
+    "worst_year": {
+      "year": 2018,
+      "ret_pct": -17.97,
+      "max_dd_pct": -23.6
+    },
+    "best_year": {
+      "year": 2023,
+      "ret_pct": 98.24
+    },
+    "by_year": [
+      {
+        "year": 2017,
+        "n_signals": 91,
+        "n_taken": 29,
+        "win_pct": 82.42,
+        "ret_pct": 5.99,
+        "max_dd_pct": -5.18
+      },
+      {
+        "year": 2018,
+        "n_signals": 205,
+        "n_taken": 65,
+        "win_pct": 44.39,
+        "ret_pct": -17.97,
+        "max_dd_pct": -23.6
+      },
+      {
+        "year": 2019,
+        "n_signals": 121,
+        "n_taken": 96,
+        "win_pct": 64.46,
+        "ret_pct": -0.15,
+        "max_dd_pct": -12.53
+      },
+      {
+        "year": 2020,
+        "n_signals": 469,
+        "n_taken": 177,
+        "win_pct": 73.77,
+        "ret_pct": 36.76,
+        "max_dd_pct": -14.69
+      },
+      {
+        "year": 2021,
+        "n_signals": 1031,
+        "n_taken": 199,
+        "win_pct": 69.16,
+        "ret_pct": 10.53,
+        "max_dd_pct": -20.02
+      },
+      {
+        "year": 2022,
+        "n_signals": 403,
+        "n_taken": 153,
+        "win_pct": 55.09,
+        "ret_pct": -5.2,
+        "max_dd_pct": -30.02
+      },
+      {
+        "year": 2023,
+        "n_signals": 648,
+        "n_taken": 187,
+        "win_pct": 76.54,
+        "ret_pct": 98.24,
+        "max_dd_pct": -5.59
+      },
+      {
+        "year": 2024,
+        "n_signals": 884,
+        "n_taken": 210,
+        "win_pct": 70.25,
+        "ret_pct": 35.62,
+        "max_dd_pct": -17.22
+      },
+      {
+        "year": 2025,
+        "n_signals": 241,
+        "n_taken": 128,
+        "win_pct": 67.63,
+        "ret_pct": 23.47,
+        "max_dd_pct": -8.95
+      },
+      {
+        "year": 2026,
+        "n_signals": 336,
+        "n_taken": 119,
+        "win_pct": 73.51,
+        "ret_pct": 39.84,
+        "max_dd_pct": -3.58
+      }
+    ],
+    "exit_family": "hi7",
+    "stop_atr_mult": 4.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "sw_double_seven",
+    "title": "SW - Double Seven",
+    "family": "mean_reversion",
+    "coverage": "8yr",
+    "start_date": "2017-01-02",
+    "end_date": "2026-09-22",
+    "n_signals_raw": 4653,
+    "n_signals_fresh": 2889,
+    "n_signals_taken": 1247,
+    "win_pct": 64.37,
+    "mean_ret_pct": 1.462,
+    "median_ret_pct": 2.859,
+    "stopped_pct": 3.01,
+    "capped_pct": 13.54,
+    "equity_multiplier": 4.546,
+    "cagr_pct": 18.85,
+    "max_dd_pct": -50.85,
+    "worst_year": {
+      "year": 2018,
+      "ret_pct": -34.23,
+      "max_dd_pct": -36.71
+    },
+    "best_year": {
+      "year": 2023,
+      "ret_pct": 55.26
+    },
+    "by_year": [
+      {
+        "year": 2017,
+        "n_signals": 108,
+        "n_taken": 56,
+        "win_pct": 84.26,
+        "ret_pct": 29.68,
+        "max_dd_pct": -3.3
+      },
+      {
+        "year": 2018,
+        "n_signals": 118,
+        "n_taken": 50,
+        "win_pct": 30.51,
+        "ret_pct": -34.23,
+        "max_dd_pct": -36.71
+      },
+      {
+        "year": 2019,
+        "n_signals": 103,
+        "n_taken": 90,
+        "win_pct": 48.54,
+        "ret_pct": -16.9,
+        "max_dd_pct": -23.26
+      },
+      {
+        "year": 2020,
+        "n_signals": 518,
+        "n_taken": 178,
+        "win_pct": 68.15,
+        "ret_pct": 53.06,
+        "max_dd_pct": -12.25
+      },
+      {
+        "year": 2021,
+        "n_signals": 748,
+        "n_taken": 187,
+        "win_pct": 63.9,
+        "ret_pct": 40.62,
+        "max_dd_pct": -13.12
+      },
+      {
+        "year": 2022,
+        "n_signals": 283,
+        "n_taken": 136,
+        "win_pct": 49.82,
+        "ret_pct": -11.62,
+        "max_dd_pct": -24.95
+      },
+      {
+        "year": 2023,
+        "n_signals": 193,
+        "n_taken": 134,
+        "win_pct": 71.5,
+        "ret_pct": 55.26,
+        "max_dd_pct": -6.43
+      },
+      {
+        "year": 2024,
+        "n_signals": 479,
+        "n_taken": 195,
+        "win_pct": 65.97,
+        "ret_pct": 24.16,
+        "max_dd_pct": -19.7
+      },
+      {
+        "year": 2025,
+        "n_signals": 125,
+        "n_taken": 96,
+        "win_pct": 68.8,
+        "ret_pct": 13.12,
+        "max_dd_pct": -7.31
+      },
+      {
+        "year": 2026,
+        "n_signals": 213,
+        "n_taken": 125,
+        "win_pct": 79.81,
+        "ret_pct": 54.61,
+        "max_dd_pct": -4.38
+      }
+    ],
+    "exit_family": "hi7",
+    "stop_atr_mult": 4.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "leader_dip_playbook",
+    "title": "SW - Leader Dip Playbook",
+    "family": "mean_reversion",
+    "coverage": "8yr",
+    "start_date": "2017-01-02",
+    "end_date": "2026-09-22",
+    "n_signals_raw": 5495,
+    "n_signals_fresh": 3771,
+    "n_signals_taken": 1709,
+    "win_pct": 67.59,
+    "mean_ret_pct": 1.352,
+    "median_ret_pct": 2.828,
+    "stopped_pct": 5.23,
+    "capped_pct": 9.81,
+    "equity_multiplier": 4.104,
+    "cagr_pct": 17.92,
+    "max_dd_pct": -36.99,
+    "worst_year": {
+      "year": 2018,
+      "ret_pct": -18.08,
+      "max_dd_pct": -27.23
+    },
+    "best_year": {
+      "year": 2023,
+      "ret_pct": 66.0
+    },
+    "by_year": [
+      {
+        "year": 2018,
+        "n_signals": 193,
+        "n_taken": 130,
+        "win_pct": 48.7,
+        "ret_pct": -18.08,
+        "max_dd_pct": -27.23
+      },
+      {
+        "year": 2019,
+        "n_signals": 191,
+        "n_taken": 133,
+        "win_pct": 63.35,
+        "ret_pct": 1.42,
+        "max_dd_pct": -15.23
+      },
+      {
+        "year": 2020,
+        "n_signals": 466,
+        "n_taken": 211,
+        "win_pct": 66.74,
+        "ret_pct": 28.81,
+        "max_dd_pct": -29.36
+      },
+      {
+        "year": 2021,
+        "n_signals": 608,
+        "n_taken": 209,
+        "win_pct": 65.46,
+        "ret_pct": 21.24,
+        "max_dd_pct": -15.07
+      },
+      {
+        "year": 2022,
+        "n_signals": 437,
+        "n_taken": 205,
+        "win_pct": 63.16,
+        "ret_pct": 6.16,
+        "max_dd_pct": -21.54
+      },
+      {
+        "year": 2023,
+        "n_signals": 467,
+        "n_taken": 221,
+        "win_pct": 74.3,
+        "ret_pct": 66.0,
+        "max_dd_pct": -7.18
+      },
+      {
+        "year": 2024,
+        "n_signals": 650,
+        "n_taken": 235,
+        "win_pct": 70.77,
+        "ret_pct": 18.59,
+        "max_dd_pct": -24.81
+      },
+      {
+        "year": 2025,
+        "n_signals": 370,
+        "n_taken": 198,
+        "win_pct": 72.7,
+        "ret_pct": 35.08,
+        "max_dd_pct": -8.58
+      },
+      {
+        "year": 2026,
+        "n_signals": 388,
+        "n_taken": 167,
+        "win_pct": 70.1,
+        "ret_pct": 12.05,
+        "max_dd_pct": -16.11
+      }
+    ],
+    "exit_family": "hi7",
+    "stop_atr_mult": 4.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "monthly_r1_breakout",
+    "title": "Monthly R1 Breakout",
+    "family": "trend_continuation",
+    "coverage": "3yr",
+    "start_date": "2023-06-13",
+    "end_date": "2026-09-25",
+    "n_signals_raw": 13519,
+    "n_signals_fresh": 5099,
+    "n_signals_taken": 317,
+    "win_pct": 31.13,
+    "mean_ret_pct": 0.024,
+    "median_ret_pct": -3.627,
+    "stopped_pct": 4.03,
+    "capped_pct": 3.65,
+    "equity_multiplier": 1.461,
+    "cagr_pct": 16.71,
+    "max_dd_pct": -19.08,
+    "worst_year": {
+      "year": 2026,
+      "ret_pct": 4.05,
+      "max_dd_pct": -16.04
+    },
+    "best_year": {
+      "year": 2024,
+      "ret_pct": 32.85
+    },
+    "by_year": [
+      {
+        "year": 2024,
+        "n_signals": 2259,
+        "n_taken": 97,
+        "win_pct": 32.27,
+        "ret_pct": 32.85,
+        "max_dd_pct": -13.95
+      },
+      {
+        "year": 2025,
+        "n_signals": 1423,
+        "n_taken": 126,
+        "win_pct": 27.48,
+        "ret_pct": 5.68,
+        "max_dd_pct": -18.69
+      },
+      {
+        "year": 2026,
+        "n_signals": 1409,
+        "n_taken": 94,
+        "win_pct": 33.0,
+        "ret_pct": 4.05,
+        "max_dd_pct": -16.04
+      }
+    ],
+    "exit_family": "ema21",
+    "stop_atr_mult": 3.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "momentum_swing",
+    "title": "SW - Momentum Leader",
+    "family": "trend_continuation",
+    "coverage": "3yr",
+    "start_date": "2023-06-13",
+    "end_date": "2026-09-25",
+    "n_signals_raw": 1037,
+    "n_signals_fresh": 993,
+    "n_signals_taken": 132,
+    "win_pct": 41.19,
+    "mean_ret_pct": 2.669,
+    "median_ret_pct": -1.684,
+    "stopped_pct": 1.11,
+    "capped_pct": 1.41,
+    "equity_multiplier": 1.411,
+    "cagr_pct": 16.61,
+    "max_dd_pct": -19.04,
+    "worst_year": {
+      "year": 2025,
+      "ret_pct": -0.93,
+      "max_dd_pct": -11.19
+    },
+    "best_year": {
+      "year": 2026,
+      "ret_pct": 24.57
+    },
+    "by_year": [
+      {
+        "year": 2024,
+        "n_signals": 640,
+        "n_taken": 66,
+        "win_pct": 38.44,
+        "ret_pct": 14.35,
+        "max_dd_pct": -14.56
+      },
+      {
+        "year": 2025,
+        "n_signals": 97,
+        "n_taken": 28,
+        "win_pct": 35.05,
+        "ret_pct": -0.93,
+        "max_dd_pct": -11.19
+      },
+      {
+        "year": 2026,
+        "n_signals": 256,
+        "n_taken": 38,
+        "win_pct": 50.39,
+        "ret_pct": 24.57,
+        "max_dd_pct": -5.85
+      }
+    ],
+    "exit_family": "ema21",
+    "stop_atr_mult": 3.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "volume_shocker",
+    "title": "Volume Shockers",
+    "family": "trend_continuation",
+    "coverage": "3yr",
+    "start_date": "2023-06-13",
+    "end_date": "2026-09-25",
+    "n_signals_raw": 24228,
+    "n_signals_fresh": 13755,
+    "n_signals_taken": 497,
+    "win_pct": 29.69,
+    "mean_ret_pct": 0.482,
+    "median_ret_pct": -3.334,
+    "stopped_pct": 2.95,
+    "capped_pct": 2.48,
+    "equity_multiplier": 1.596,
+    "cagr_pct": 15.92,
+    "max_dd_pct": -32.48,
+    "worst_year": {
+      "year": 2026,
+      "ret_pct": -17.43,
+      "max_dd_pct": -23.32
+    },
+    "best_year": {
+      "year": 2023,
+      "ret_pct": 75.73
+    },
+    "by_year": [
+      {
+        "year": 2023,
+        "n_signals": 2260,
+        "n_taken": 64,
+        "win_pct": 39.12,
+        "ret_pct": 75.73,
+        "max_dd_pct": -7.74
+      },
+      {
+        "year": 2024,
+        "n_signals": 4152,
+        "n_taken": 142,
+        "win_pct": 29.05,
+        "ret_pct": 2.24,
+        "max_dd_pct": -16.57
+      },
+      {
+        "year": 2025,
+        "n_signals": 3865,
+        "n_taken": 162,
+        "win_pct": 24.66,
+        "ret_pct": 7.62,
+        "max_dd_pct": -25.48
+      },
+      {
+        "year": 2026,
+        "n_signals": 3464,
+        "n_taken": 129,
+        "win_pct": 29.94,
+        "ret_pct": -17.43,
+        "max_dd_pct": -23.32
+      }
+    ],
+    "exit_family": "ema21",
+    "stop_atr_mult": 3.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "minervini_trend_template",
+    "title": "Stage 2 Uptrend",
+    "family": "trend_continuation",
+    "coverage": "3yr",
+    "start_date": "2023-06-13",
+    "end_date": "2026-09-25",
+    "n_signals_raw": 95788,
+    "n_signals_fresh": 2474,
+    "n_signals_taken": 351,
+    "win_pct": 32.01,
+    "mean_ret_pct": 0.872,
+    "median_ret_pct": -2.71,
+    "stopped_pct": 1.74,
+    "capped_pct": 4.01,
+    "equity_multiplier": 1.371,
+    "cagr_pct": 15.05,
+    "max_dd_pct": -33.25,
+    "worst_year": {
+      "year": 2025,
+      "ret_pct": -26.15,
+      "max_dd_pct": -30.31
+    },
+    "best_year": {
+      "year": 2026,
+      "ret_pct": 37.08
+    },
+    "by_year": [
+      {
+        "year": 2024,
+        "n_signals": 956,
+        "n_taken": 79,
+        "win_pct": 34.41,
+        "ret_pct": 35.41,
+        "max_dd_pct": -11.5
+      },
+      {
+        "year": 2025,
+        "n_signals": 822,
+        "n_taken": 169,
+        "win_pct": 27.74,
+        "ret_pct": -26.15,
+        "max_dd_pct": -30.31
+      },
+      {
+        "year": 2026,
+        "n_signals": 693,
+        "n_taken": 103,
+        "win_pct": 33.77,
+        "ret_pct": 37.08,
+        "max_dd_pct": -12.25
+      }
+    ],
+    "exit_family": "ema21",
+    "stop_atr_mult": 3.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "double_seven",
+    "title": "Double Seven",
+    "family": "mean_reversion",
+    "coverage": "8yr",
+    "start_date": "2017-01-02",
+    "end_date": "2026-09-22",
+    "n_signals_raw": 191348,
+    "n_signals_fresh": 19977,
+    "n_signals_taken": 2190,
+    "win_pct": 64.37,
+    "mean_ret_pct": 0.707,
+    "median_ret_pct": 1.81,
+    "stopped_pct": 5.62,
+    "capped_pct": 9.65,
+    "equity_multiplier": 3.342,
+    "cagr_pct": 14.75,
+    "max_dd_pct": -47.35,
+    "worst_year": {
+      "year": 2018,
+      "ret_pct": -16.33,
+      "max_dd_pct": -28.15
+    },
+    "best_year": {
+      "year": 2023,
+      "ret_pct": 48.43
+    },
+    "by_year": [
+      {
+        "year": 2017,
+        "n_signals": 709,
+        "n_taken": 63,
+        "win_pct": 73.2,
+        "ret_pct": 9.02,
+        "max_dd_pct": -4.66
+      },
+      {
+        "year": 2018,
+        "n_signals": 1214,
+        "n_taken": 207,
+        "win_pct": 47.36,
+        "ret_pct": -16.33,
+        "max_dd_pct": -28.15
+      },
+      {
+        "year": 2019,
+        "n_signals": 1248,
+        "n_taken": 223,
+        "win_pct": 57.13,
+        "ret_pct": -7.59,
+        "max_dd_pct": -23.24
+      },
+      {
+        "year": 2020,
+        "n_signals": 2199,
+        "n_taken": 265,
+        "win_pct": 69.9,
+        "ret_pct": 26.54,
+        "max_dd_pct": -33.59
+      },
+      {
+        "year": 2021,
+        "n_signals": 2523,
+        "n_taken": 241,
+        "win_pct": 67.74,
+        "ret_pct": 32.52,
+        "max_dd_pct": -18.63
+      },
+      {
+        "year": 2022,
+        "n_signals": 2320,
+        "n_taken": 230,
+        "win_pct": 56.77,
+        "ret_pct": -9.48,
+        "max_dd_pct": -26.07
+      },
+      {
+        "year": 2023,
+        "n_signals": 2948,
+        "n_taken": 267,
+        "win_pct": 73.64,
+        "ret_pct": 48.43,
+        "max_dd_pct": -11.15
+      },
+      {
+        "year": 2024,
+        "n_signals": 2862,
+        "n_taken": 251,
+        "win_pct": 64.92,
+        "ret_pct": 25.84,
+        "max_dd_pct": -20.35
+      },
+      {
+        "year": 2025,
+        "n_signals": 2019,
+        "n_taken": 249,
+        "win_pct": 61.81,
+        "ret_pct": 2.62,
+        "max_dd_pct": -21.04
+      },
+      {
+        "year": 2026,
+        "n_signals": 1932,
+        "n_taken": 194,
+        "win_pct": 62.63,
+        "ret_pct": 36.29,
+        "max_dd_pct": -12.09
+      }
+    ],
+    "exit_family": "hi7",
+    "stop_atr_mult": 4.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "three_weeks_tight",
+    "title": "Three Weeks Tight",
+    "family": "trend_continuation",
+    "coverage": "3yr",
+    "start_date": "2023-06-13",
+    "end_date": "2026-09-25",
+    "n_signals_raw": 7273,
+    "n_signals_fresh": 1272,
+    "n_signals_taken": 388,
+    "win_pct": 26.83,
+    "mean_ret_pct": -0.099,
+    "median_ret_pct": -1.72,
+    "stopped_pct": 0.87,
+    "capped_pct": 2.12,
+    "equity_multiplier": 1.353,
+    "cagr_pct": 14.36,
+    "max_dd_pct": -19.25,
+    "worst_year": {
+      "year": 2025,
+      "ret_pct": -11.92,
+      "max_dd_pct": -18.04
+    },
+    "best_year": {
+      "year": 2026,
+      "ret_pct": 27.34
+    },
+    "by_year": [
+      {
+        "year": 2024,
+        "n_signals": 330,
+        "n_taken": 93,
+        "win_pct": 29.09,
+        "ret_pct": 20.58,
+        "max_dd_pct": -9.97
+      },
+      {
+        "year": 2025,
+        "n_signals": 501,
+        "n_taken": 174,
+        "win_pct": 25.15,
+        "ret_pct": -11.92,
+        "max_dd_pct": -18.04
+      },
+      {
+        "year": 2026,
+        "n_signals": 440,
+        "n_taken": 121,
+        "win_pct": 27.05,
+        "ret_pct": 27.34,
+        "max_dd_pct": -8.15
+      }
+    ],
+    "exit_family": "ema21",
+    "stop_atr_mult": 3.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "oversold_in_uptrend",
+    "title": "Oversold in Uptrend",
+    "family": "mean_reversion",
+    "coverage": "8yr",
+    "start_date": "2017-01-02",
+    "end_date": "2026-09-22",
+    "n_signals_raw": 25997,
+    "n_signals_fresh": 7014,
+    "n_signals_taken": 1514,
+    "win_pct": 66.2,
+    "mean_ret_pct": 1.559,
+    "median_ret_pct": 2.56,
+    "stopped_pct": 5.95,
+    "capped_pct": 9.84,
+    "equity_multiplier": 2.983,
+    "cagr_pct": 13.27,
+    "max_dd_pct": -35.95,
+    "worst_year": {
+      "year": 2022,
+      "ret_pct": -17.09,
+      "max_dd_pct": -28.27
+    },
+    "best_year": {
+      "year": 2023,
+      "ret_pct": 55.23
+    },
+    "by_year": [
+      {
+        "year": 2017,
+        "n_signals": 83,
+        "n_taken": 42,
+        "win_pct": 80.72,
+        "ret_pct": 12.71,
+        "max_dd_pct": -3.36
+      },
+      {
+        "year": 2018,
+        "n_signals": 694,
+        "n_taken": 147,
+        "win_pct": 60.81,
+        "ret_pct": -5.54,
+        "max_dd_pct": -19.42
+      },
+      {
+        "year": 2019,
+        "n_signals": 297,
+        "n_taken": 123,
+        "win_pct": 58.59,
+        "ret_pct": -7.47,
+        "max_dd_pct": -16.24
+      },
+      {
+        "year": 2020,
+        "n_signals": 470,
+        "n_taken": 136,
+        "win_pct": 55.53,
+        "ret_pct": 11.39,
+        "max_dd_pct": -32.85
+      },
+      {
+        "year": 2021,
+        "n_signals": 1148,
+        "n_taken": 200,
+        "win_pct": 71.34,
+        "ret_pct": 29.63,
+        "max_dd_pct": -12.22
+      },
+      {
+        "year": 2022,
+        "n_signals": 795,
+        "n_taken": 146,
+        "win_pct": 67.04,
+        "ret_pct": -17.09,
+        "max_dd_pct": -28.27
+      },
+      {
+        "year": 2023,
+        "n_signals": 873,
+        "n_taken": 218,
+        "win_pct": 73.2,
+        "ret_pct": 55.23,
+        "max_dd_pct": -7.85
+      },
+      {
+        "year": 2024,
+        "n_signals": 1414,
+        "n_taken": 208,
+        "win_pct": 71.29,
+        "ret_pct": 35.26,
+        "max_dd_pct": -13.54
+      },
+      {
+        "year": 2025,
+        "n_signals": 784,
+        "n_taken": 171,
+        "win_pct": 57.27,
+        "ret_pct": 18.32,
+        "max_dd_pct": -11.97
+      },
+      {
+        "year": 2026,
+        "n_signals": 456,
+        "n_taken": 123,
+        "win_pct": 59.43,
+        "ret_pct": 1.81,
+        "max_dd_pct": -13.47
+      }
+    ],
+    "exit_family": "hi7",
+    "stop_atr_mult": 4.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "leader_dip",
+    "title": "Leader Dip",
+    "family": "mean_reversion",
+    "coverage": "8yr",
+    "start_date": "2017-01-02",
+    "end_date": "2026-09-22",
+    "n_signals_raw": 58967,
+    "n_signals_fresh": 9288,
+    "n_signals_taken": 2051,
+    "win_pct": 65.19,
+    "mean_ret_pct": 0.896,
+    "median_ret_pct": 2.241,
+    "stopped_pct": 6.31,
+    "capped_pct": 9.16,
+    "equity_multiplier": 2.852,
+    "cagr_pct": 13.01,
+    "max_dd_pct": -36.47,
+    "worst_year": {
+      "year": 2022,
+      "ret_pct": -18.83,
+      "max_dd_pct": -26.85
+    },
+    "best_year": {
+      "year": 2023,
+      "ret_pct": 59.24
+    },
+    "by_year": [
+      {
+        "year": 2018,
+        "n_signals": 817,
+        "n_taken": 218,
+        "win_pct": 55.32,
+        "ret_pct": 3.57,
+        "max_dd_pct": -17.92
+      },
+      {
+        "year": 2019,
+        "n_signals": 872,
+        "n_taken": 229,
+        "win_pct": 61.7,
+        "ret_pct": -7.5,
+        "max_dd_pct": -24.72
+      },
+      {
+        "year": 2020,
+        "n_signals": 961,
+        "n_taken": 243,
+        "win_pct": 64.93,
+        "ret_pct": 19.97,
+        "max_dd_pct": -33.58
+      },
+      {
+        "year": 2021,
+        "n_signals": 986,
+        "n_taken": 213,
+        "win_pct": 68.26,
+        "ret_pct": 13.42,
+        "max_dd_pct": -14.98
+      },
+      {
+        "year": 2022,
+        "n_signals": 1118,
+        "n_taken": 225,
+        "win_pct": 60.91,
+        "ret_pct": -18.83,
+        "max_dd_pct": -26.85
+      },
+      {
+        "year": 2023,
+        "n_signals": 1096,
+        "n_taken": 252,
+        "win_pct": 71.81,
+        "ret_pct": 59.24,
+        "max_dd_pct": -8.1
+      },
+      {
+        "year": 2024,
+        "n_signals": 1227,
+        "n_taken": 234,
+        "win_pct": 68.22,
+        "ret_pct": 20.01,
+        "max_dd_pct": -19.87
+      },
+      {
+        "year": 2025,
+        "n_signals": 1205,
+        "n_taken": 250,
+        "win_pct": 66.56,
+        "ret_pct": 1.38,
+        "max_dd_pct": -25.07
+      },
+      {
+        "year": 2026,
+        "n_signals": 1005,
+        "n_taken": 187,
+        "win_pct": 65.67,
+        "ret_pct": 39.14,
+        "max_dd_pct": -13.12
+      }
+    ],
+    "exit_family": "hi7",
+    "stop_atr_mult": 4.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "vl_pocket_pivot",
+    "title": "VL - Pocket Pivot",
+    "family": "trend_continuation",
+    "coverage": "3yr",
+    "start_date": "2023-06-13",
+    "end_date": "2026-09-25",
+    "n_signals_raw": 38887,
+    "n_signals_fresh": 7344,
+    "n_signals_taken": 348,
+    "win_pct": 27.83,
+    "mean_ret_pct": -0.123,
+    "median_ret_pct": -3.12,
+    "stopped_pct": 1.5,
+    "capped_pct": 2.5,
+    "equity_multiplier": 1.293,
+    "cagr_pct": 11.08,
+    "max_dd_pct": -24.8,
+    "worst_year": {
+      "year": 2025,
+      "ret_pct": -13.15,
+      "max_dd_pct": -15.97
+    },
+    "best_year": {
+      "year": 2026,
+      "ret_pct": 26.04
+    },
+    "by_year": [
+      {
+        "year": 2024,
+        "n_signals": 2907,
+        "n_taken": 134,
+        "win_pct": 26.28,
+        "ret_pct": 18.1,
+        "max_dd_pct": -12.83
+      },
+      {
+        "year": 2025,
+        "n_signals": 2267,
+        "n_taken": 123,
+        "win_pct": 24.88,
+        "ret_pct": -13.15,
+        "max_dd_pct": -15.97
+      },
+      {
+        "year": 2026,
+        "n_signals": 2153,
+        "n_taken": 91,
+        "win_pct": 33.02,
+        "ret_pct": 26.04,
+        "max_dd_pct": -9.72
+      }
+    ],
+    "exit_family": "ema21",
+    "stop_atr_mult": 3.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "vl_long_base_breakout",
+    "title": "VL - Long Base Breakout",
+    "family": "trend_continuation",
+    "coverage": "3yr",
+    "start_date": "2023-06-13",
+    "end_date": "2026-09-25",
+    "n_signals_raw": 4719,
+    "n_signals_fresh": 2206,
+    "n_signals_taken": 214,
+    "win_pct": 34.29,
+    "mean_ret_pct": 0.795,
+    "median_ret_pct": -3.429,
+    "stopped_pct": 5.0,
+    "capped_pct": 4.36,
+    "equity_multiplier": 1.248,
+    "cagr_pct": 10.35,
+    "max_dd_pct": -23.47,
+    "worst_year": {
+      "year": 2026,
+      "ret_pct": 6.15,
+      "max_dd_pct": -13.61
+    },
+    "best_year": {
+      "year": 2024,
+      "ret_pct": 10.52
+    },
+    "by_year": [
+      {
+        "year": 2024,
+        "n_signals": 1202,
+        "n_taken": 65,
+        "win_pct": 31.78,
+        "ret_pct": 10.52,
+        "max_dd_pct": -14.94
+      },
+      {
+        "year": 2025,
+        "n_signals": 461,
+        "n_taken": 84,
+        "win_pct": 37.31,
+        "ret_pct": 6.38,
+        "max_dd_pct": -12.86
+      },
+      {
+        "year": 2026,
+        "n_signals": 539,
+        "n_taken": 65,
+        "win_pct": 37.29,
+        "ret_pct": 6.15,
+        "max_dd_pct": -13.61
+      }
+    ],
+    "exit_family": "ema21",
+    "stop_atr_mult": 3.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "rsi2_reversion",
+    "title": "RSI(2) Snapback",
+    "family": "mean_reversion",
+    "coverage": "8yr",
+    "start_date": "2017-01-02",
+    "end_date": "2026-09-22",
+    "n_signals_raw": 34114,
+    "n_signals_fresh": 14505,
+    "n_signals_taken": 2032,
+    "win_pct": 65.36,
+    "mean_ret_pct": 1.097,
+    "median_ret_pct": 2.123,
+    "stopped_pct": 5.24,
+    "capped_pct": 9.64,
+    "equity_multiplier": 2.288,
+    "cagr_pct": 9.99,
+    "max_dd_pct": -53.86,
+    "worst_year": {
+      "year": 2018,
+      "ret_pct": -29.15,
+      "max_dd_pct": -32.1
+    },
+    "best_year": {
+      "year": 2023,
+      "ret_pct": 102.38
+    },
+    "by_year": [
+      {
+        "year": 2017,
+        "n_signals": 259,
+        "n_taken": 32,
+        "win_pct": 77.99,
+        "ret_pct": 2.79,
+        "max_dd_pct": -2.99
+      },
+      {
+        "year": 2018,
+        "n_signals": 969,
+        "n_taken": 187,
+        "win_pct": 48.09,
+        "ret_pct": -29.15,
+        "max_dd_pct": -32.1
+      },
+      {
+        "year": 2019,
+        "n_signals": 693,
+        "n_taken": 211,
+        "win_pct": 62.63,
+        "ret_pct": -3.45,
+        "max_dd_pct": -17.04
+      },
+      {
+        "year": 2020,
+        "n_signals": 1185,
+        "n_taken": 230,
+        "win_pct": 68.95,
+        "ret_pct": 5.04,
+        "max_dd_pct": -35.72
+      },
+      {
+        "year": 2021,
+        "n_signals": 2729,
+        "n_taken": 250,
+        "win_pct": 67.02,
+        "ret_pct": 3.19,
+        "max_dd_pct": -16.25
+      },
+      {
+        "year": 2022,
+        "n_signals": 1498,
+        "n_taken": 218,
+        "win_pct": 57.81,
+        "ret_pct": 0.11,
+        "max_dd_pct": -27.09
+      },
+      {
+        "year": 2023,
+        "n_signals": 2172,
+        "n_taken": 260,
+        "win_pct": 74.22,
+        "ret_pct": 102.38,
+        "max_dd_pct": -11.06
+      },
+      {
+        "year": 2024,
+        "n_signals": 2732,
+        "n_taken": 242,
+        "win_pct": 66.91,
+        "ret_pct": 40.33,
+        "max_dd_pct": -14.38
+      },
+      {
+        "year": 2025,
+        "n_signals": 1105,
+        "n_taken": 225,
+        "win_pct": 61.18,
+        "ret_pct": -16.87,
+        "max_dd_pct": -26.31
+      },
+      {
+        "year": 2026,
+        "n_signals": 1163,
+        "n_taken": 177,
+        "win_pct": 64.49,
+        "ret_pct": 27.01,
+        "max_dd_pct": -13.0
+      }
+    ],
+    "exit_family": "hi7",
+    "stop_atr_mult": 4.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "held_breakout",
+    "title": "Breakout That Held",
+    "family": "trend_continuation",
+    "coverage": "3yr",
+    "start_date": "2023-06-13",
+    "end_date": "2026-09-25",
+    "n_signals_raw": 1066,
+    "n_signals_fresh": 163,
+    "n_signals_taken": 126,
+    "win_pct": 43.21,
+    "mean_ret_pct": 2.063,
+    "median_ret_pct": -1.021,
+    "stopped_pct": 3.7,
+    "capped_pct": 4.32,
+    "equity_multiplier": 1.226,
+    "cagr_pct": 9.47,
+    "max_dd_pct": -14.11,
+    "worst_year": {
+      "year": 2025,
+      "ret_pct": -1.1,
+      "max_dd_pct": -9.25
+    },
+    "best_year": {
+      "year": 2024,
+      "ret_pct": 19.79
+    },
+    "by_year": [
+      {
+        "year": 2024,
+        "n_signals": 48,
+        "n_taken": 33,
+        "win_pct": 58.33,
+        "ret_pct": 19.79,
+        "max_dd_pct": -7.39
+      },
+      {
+        "year": 2025,
+        "n_signals": 52,
+        "n_taken": 48,
+        "win_pct": 28.85,
+        "ret_pct": -1.1,
+        "max_dd_pct": -9.25
+      },
+      {
+        "year": 2026,
+        "n_signals": 62,
+        "n_taken": 45,
+        "win_pct": 43.55,
+        "ret_pct": 3.47,
+        "max_dd_pct": -10.21
+      }
+    ],
+    "exit_family": "ema21",
+    "stop_atr_mult": 3.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "donchian_breakout",
+    "title": "20-Day Donchian Breakout",
+    "family": "trend_continuation",
+    "coverage": "3yr",
+    "start_date": "2023-06-13",
+    "end_date": "2026-09-25",
+    "n_signals_raw": 11613,
+    "n_signals_fresh": 4671,
+    "n_signals_taken": 318,
+    "win_pct": 29.62,
+    "mean_ret_pct": -0.119,
+    "median_ret_pct": -3.851,
+    "stopped_pct": 3.26,
+    "capped_pct": 4.35,
+    "equity_multiplier": 1.224,
+    "cagr_pct": 9.38,
+    "max_dd_pct": -40.81,
+    "worst_year": {
+      "year": 2024,
+      "ret_pct": -1.85,
+      "max_dd_pct": -28.92
+    },
+    "best_year": {
+      "year": 2026,
+      "ret_pct": 16.96
+    },
+    "by_year": [
+      {
+        "year": 2024,
+        "n_signals": 1578,
+        "n_taken": 81,
+        "win_pct": 30.04,
+        "ret_pct": -1.85,
+        "max_dd_pct": -28.92
+      },
+      {
+        "year": 2025,
+        "n_signals": 1535,
+        "n_taken": 142,
+        "win_pct": 26.45,
+        "ret_pct": 6.59,
+        "max_dd_pct": -27.41
+      },
+      {
+        "year": 2026,
+        "n_signals": 1550,
+        "n_taken": 95,
+        "win_pct": 32.32,
+        "ret_pct": 16.96,
+        "max_dd_pct": -19.19
+      }
+    ],
+    "exit_family": "ema21",
+    "stop_atr_mult": 3.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "r1_breakout_retest",
+    "title": "R1 Breakout, Then Retest",
+    "family": "trend_continuation",
+    "coverage": "3yr",
+    "start_date": "2023-06-13",
+    "end_date": "2026-09-25",
+    "n_signals_raw": 23965,
+    "n_signals_fresh": 4121,
+    "n_signals_taken": 313,
+    "win_pct": 31.83,
+    "mean_ret_pct": 0.34,
+    "median_ret_pct": -3.086,
+    "stopped_pct": 2.77,
+    "capped_pct": 3.67,
+    "equity_multiplier": 1.222,
+    "cagr_pct": 8.51,
+    "max_dd_pct": -30.08,
+    "worst_year": {
+      "year": 2024,
+      "ret_pct": 3.93,
+      "max_dd_pct": -14.79
+    },
+    "best_year": {
+      "year": 2026,
+      "ret_pct": 13.08
+    },
+    "by_year": [
+      {
+        "year": 2024,
+        "n_signals": 1796,
+        "n_taken": 101,
+        "win_pct": 33.18,
+        "ret_pct": 3.93,
+        "max_dd_pct": -14.79
+      },
+      {
+        "year": 2025,
+        "n_signals": 1158,
+        "n_taken": 125,
+        "win_pct": 28.24,
+        "ret_pct": 3.97,
+        "max_dd_pct": -21.71
+      },
+      {
+        "year": 2026,
+        "n_signals": 1158,
+        "n_taken": 87,
+        "win_pct": 33.33,
+        "ret_pct": 13.08,
+        "max_dd_pct": -10.44
+      }
+    ],
+    "exit_family": "ema21",
+    "stop_atr_mult": 3.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "high_tight_breakout",
+    "title": "Breakout at 52-Week High",
+    "family": "trend_continuation",
+    "coverage": "3yr",
+    "start_date": "2023-06-13",
+    "end_date": "2026-09-25",
+    "n_signals_raw": 5377,
+    "n_signals_fresh": 2589,
+    "n_signals_taken": 274,
+    "win_pct": 33.75,
+    "mean_ret_pct": 0.47,
+    "median_ret_pct": -3.708,
+    "stopped_pct": 5.38,
+    "capped_pct": 5.38,
+    "equity_multiplier": 1.179,
+    "cagr_pct": 7.61,
+    "max_dd_pct": -33.98,
+    "worst_year": {
+      "year": 2024,
+      "ret_pct": 2.48,
+      "max_dd_pct": -18.91
+    },
+    "best_year": {
+      "year": 2026,
+      "ret_pct": 9.92
+    },
+    "by_year": [
+      {
+        "year": 2024,
+        "n_signals": 986,
+        "n_taken": 72,
+        "win_pct": 32.45,
+        "ret_pct": 2.48,
+        "max_dd_pct": -18.91
+      },
+      {
+        "year": 2025,
+        "n_signals": 658,
+        "n_taken": 115,
+        "win_pct": 34.04,
+        "ret_pct": 4.7,
+        "max_dd_pct": -22.69
+      },
+      {
+        "year": 2026,
+        "n_signals": 940,
+        "n_taken": 87,
+        "win_pct": 34.89,
+        "ret_pct": 9.92,
+        "max_dd_pct": -18.06
+      }
+    ],
+    "exit_family": "ema21",
+    "stop_atr_mult": 3.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "vl_volume_spike_breakout",
+    "title": "VL - Volume Spike Breakout",
+    "family": "trend_continuation",
+    "coverage": "3yr",
+    "start_date": "2023-06-13",
+    "end_date": "2026-09-25",
+    "n_signals_raw": 1544,
+    "n_signals_fresh": 1336,
+    "n_signals_taken": 206,
+    "win_pct": 35.36,
+    "mean_ret_pct": 1.125,
+    "median_ret_pct": -4.036,
+    "stopped_pct": 8.18,
+    "capped_pct": 6.16,
+    "equity_multiplier": 1.157,
+    "cagr_pct": 6.7,
+    "max_dd_pct": -18.86,
+    "worst_year": {
+      "year": 2025,
+      "ret_pct": -3.37,
+      "max_dd_pct": -13.19
+    },
+    "best_year": {
+      "year": 2026,
+      "ret_pct": 10.81
+    },
+    "by_year": [
+      {
+        "year": 2024,
+        "n_signals": 414,
+        "n_taken": 61,
+        "win_pct": 34.78,
+        "ret_pct": 8.07,
+        "max_dd_pct": -11.95
+      },
+      {
+        "year": 2025,
+        "n_signals": 432,
+        "n_taken": 76,
+        "win_pct": 33.56,
+        "ret_pct": -3.37,
+        "max_dd_pct": -13.19
+      },
+      {
+        "year": 2026,
+        "n_signals": 486,
+        "n_taken": 69,
+        "win_pct": 37.45,
+        "ret_pct": 10.81,
+        "max_dd_pct": -16.51
+      }
+    ],
+    "exit_family": "ema21",
+    "stop_atr_mult": 3.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "vcp_squeeze",
+    "title": "Volatility Contraction",
+    "family": "trend_continuation",
+    "coverage": "3yr",
+    "start_date": "2023-06-13",
+    "end_date": "2026-09-25",
+    "n_signals_raw": 5775,
+    "n_signals_fresh": 1534,
+    "n_signals_taken": 447,
+    "win_pct": 22.0,
+    "mean_ret_pct": -0.473,
+    "median_ret_pct": -1.949,
+    "stopped_pct": 0.33,
+    "capped_pct": 1.31,
+    "equity_multiplier": 1.043,
+    "cagr_pct": 1.91,
+    "max_dd_pct": -18.54,
+    "worst_year": {
+      "year": 2025,
+      "ret_pct": -10.94,
+      "max_dd_pct": -17.92
+    },
+    "best_year": {
+      "year": 2026,
+      "ret_pct": 11.34
+    },
+    "by_year": [
+      {
+        "year": 2024,
+        "n_signals": 363,
+        "n_taken": 115,
+        "win_pct": 22.04,
+        "ret_pct": 5.21,
+        "max_dd_pct": -10.03
+      },
+      {
+        "year": 2025,
+        "n_signals": 683,
+        "n_taken": 197,
+        "win_pct": 21.96,
+        "ret_pct": -10.94,
+        "max_dd_pct": -17.92
+      },
+      {
+        "year": 2026,
+        "n_signals": 486,
+        "n_taken": 135,
+        "win_pct": 22.02,
+        "ret_pct": 11.34,
+        "max_dd_pct": -10.7
+      }
+    ],
+    "exit_family": "ema21",
+    "stop_atr_mult": 3.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "monthly_r1_retest",
+    "title": "Monthly R1 Retest",
+    "family": "trend_continuation",
+    "coverage": "3yr",
+    "start_date": "2023-06-13",
+    "end_date": "2026-09-25",
+    "n_signals_raw": 12961,
+    "n_signals_fresh": 3771,
+    "n_signals_taken": 332,
+    "win_pct": 30.6,
+    "mean_ret_pct": 0.242,
+    "median_ret_pct": -3.014,
+    "stopped_pct": 3.13,
+    "capped_pct": 3.61,
+    "equity_multiplier": 1.033,
+    "cagr_pct": 1.33,
+    "max_dd_pct": -36.93,
+    "worst_year": {
+      "year": 2025,
+      "ret_pct": -13.66,
+      "max_dd_pct": -26.37
+    },
+    "best_year": {
+      "year": 2024,
+      "ret_pct": 13.04
+    },
+    "by_year": [
+      {
+        "year": 2024,
+        "n_signals": 1613,
+        "n_taken": 106,
+        "win_pct": 31.99,
+        "ret_pct": 13.04,
+        "max_dd_pct": -22.69
+      },
+      {
+        "year": 2025,
+        "n_signals": 1090,
+        "n_taken": 133,
+        "win_pct": 26.06,
+        "ret_pct": -13.66,
+        "max_dd_pct": -26.37
+      },
+      {
+        "year": 2026,
+        "n_signals": 1062,
+        "n_taken": 93,
+        "win_pct": 33.15,
+        "ret_pct": 5.82,
+        "max_dd_pct": -13.55
+      }
+    ],
+    "exit_family": "ema21",
+    "stop_atr_mult": 3.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "pocket_pivot",
+    "title": "Pocket Pivot",
+    "family": "trend_continuation",
+    "coverage": "3yr",
+    "start_date": "2023-06-13",
+    "end_date": "2026-09-25",
+    "n_signals_raw": 12368,
+    "n_signals_fresh": 4033,
+    "n_signals_taken": 455,
+    "win_pct": 25.84,
+    "mean_ret_pct": -0.445,
+    "median_ret_pct": -2.863,
+    "stopped_pct": 0.77,
+    "capped_pct": 2.66,
+    "equity_multiplier": 1.019,
+    "cagr_pct": 0.83,
+    "max_dd_pct": -31.77,
+    "worst_year": {
+      "year": 2025,
+      "ret_pct": -5.56,
+      "max_dd_pct": -23.11
+    },
+    "best_year": {
+      "year": 2026,
+      "ret_pct": 9.31
+    },
+    "by_year": [
+      {
+        "year": 2024,
+        "n_signals": 1439,
+        "n_taken": 114,
+        "win_pct": 25.99,
+        "ret_pct": -1.32,
+        "max_dd_pct": -18.8
+      },
+      {
+        "year": 2025,
+        "n_signals": 1323,
+        "n_taken": 206,
+        "win_pct": 23.43,
+        "ret_pct": -5.56,
+        "max_dd_pct": -23.11
+      },
+      {
+        "year": 2026,
+        "n_signals": 1266,
+        "n_taken": 135,
+        "win_pct": 28.2,
+        "ret_pct": 9.31,
+        "max_dd_pct": -14.89
+      }
+    ],
+    "exit_family": "ema21",
+    "stop_atr_mult": 3.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "base_breakout_r1",
+    "title": "Quarter Base, R1 Break",
+    "family": "trend_continuation",
+    "coverage": "3yr",
+    "start_date": "2023-06-13",
+    "end_date": "2026-09-25",
+    "n_signals_raw": 10521,
+    "n_signals_fresh": 2474,
+    "n_signals_taken": 343,
+    "win_pct": 30.17,
+    "mean_ret_pct": -0.217,
+    "median_ret_pct": -3.007,
+    "stopped_pct": 2.71,
+    "capped_pct": 2.87,
+    "equity_multiplier": 0.941,
+    "cagr_pct": -2.53,
+    "max_dd_pct": -23.45,
+    "worst_year": {
+      "year": 2026,
+      "ret_pct": -8.55,
+      "max_dd_pct": -14.29
+    },
+    "best_year": {
+      "year": 2024,
+      "ret_pct": 12.35
+    },
+    "by_year": [
+      {
+        "year": 2024,
+        "n_signals": 579,
+        "n_taken": 92,
+        "win_pct": 33.68,
+        "ret_pct": 12.35,
+        "max_dd_pct": -12.79
+      },
+      {
+        "year": 2025,
+        "n_signals": 972,
+        "n_taken": 145,
+        "win_pct": 28.7,
+        "ret_pct": -8.41,
+        "max_dd_pct": -15.47
+      },
+      {
+        "year": 2026,
+        "n_signals": 922,
+        "n_taken": 106,
+        "win_pct": 29.5,
+        "ret_pct": -8.55,
+        "max_dd_pct": -14.29
+      }
+    ],
+    "exit_family": "ema21",
+    "stop_atr_mult": 3.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "momentum_leaders",
+    "title": "Momentum Leaders",
+    "family": "trend_continuation",
+    "coverage": "3yr",
+    "start_date": "2023-06-13",
+    "end_date": "2026-09-25",
+    "n_signals_raw": 74415,
+    "n_signals_fresh": 2366,
+    "n_signals_taken": 364,
+    "win_pct": 33.22,
+    "mean_ret_pct": 0.95,
+    "median_ret_pct": -2.44,
+    "stopped_pct": 2.24,
+    "capped_pct": 2.84,
+    "equity_multiplier": 0.934,
+    "cagr_pct": -2.99,
+    "max_dd_pct": -35.38,
+    "worst_year": {
+      "year": 2025,
+      "ret_pct": -13.22,
+      "max_dd_pct": -28.11
+    },
+    "best_year": {
+      "year": 2026,
+      "ret_pct": 4.97
+    },
+    "by_year": [
+      {
+        "year": 2024,
+        "n_signals": 1067,
+        "n_taken": 89,
+        "win_pct": 34.02,
+        "ret_pct": 2.56,
+        "max_dd_pct": -17.36
+      },
+      {
+        "year": 2025,
+        "n_signals": 619,
+        "n_taken": 154,
+        "win_pct": 28.27,
+        "ret_pct": -13.22,
+        "max_dd_pct": -28.11
+      },
+      {
+        "year": 2026,
+        "n_signals": 677,
+        "n_taken": 121,
+        "win_pct": 36.48,
+        "ret_pct": 4.97,
+        "max_dd_pct": -21.33
+      }
+    ],
+    "exit_family": "ema21",
+    "stop_atr_mult": 3.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "vl_wyckoff_spring",
+    "title": "VL - Wyckoff Spring",
+    "family": "mean_reversion",
+    "coverage": "8yr",
+    "start_date": "2017-01-02",
+    "end_date": "2026-09-22",
+    "n_signals_raw": 1657,
+    "n_signals_fresh": 1590,
+    "n_signals_taken": 1069,
+    "win_pct": 59.09,
+    "mean_ret_pct": -0.113,
+    "median_ret_pct": 0.862,
+    "stopped_pct": 5.92,
+    "capped_pct": 7.8,
+    "equity_multiplier": 0.7,
+    "cagr_pct": -3.98,
+    "max_dd_pct": -45.37,
+    "worst_year": {
+      "year": 2019,
+      "ret_pct": -18.07,
+      "max_dd_pct": -25.2
+    },
+    "best_year": {
+      "year": 2023,
+      "ret_pct": 30.69
+    },
+    "by_year": [
+      {
+        "year": 2017,
+        "n_signals": 47,
+        "n_taken": 42,
+        "win_pct": 57.45,
+        "ret_pct": 0.23,
+        "max_dd_pct": -5.39
+      },
+      {
+        "year": 2018,
+        "n_signals": 69,
+        "n_taken": 47,
+        "win_pct": 40.58,
+        "ret_pct": -16.58,
+        "max_dd_pct": -19.87
+      },
+      {
+        "year": 2019,
+        "n_signals": 143,
+        "n_taken": 97,
+        "win_pct": 47.55,
+        "ret_pct": -18.07,
+        "max_dd_pct": -25.2
+      },
+      {
+        "year": 2020,
+        "n_signals": 120,
+        "n_taken": 103,
+        "win_pct": 64.17,
+        "ret_pct": -3.15,
+        "max_dd_pct": -13.89
+      },
+      {
+        "year": 2021,
+        "n_signals": 225,
+        "n_taken": 153,
+        "win_pct": 56.89,
+        "ret_pct": 1.27,
+        "max_dd_pct": -15.53
+      },
+      {
+        "year": 2022,
+        "n_signals": 102,
+        "n_taken": 98,
+        "win_pct": 58.82,
+        "ret_pct": -14.48,
+        "max_dd_pct": -17.77
+      },
+      {
+        "year": 2023,
+        "n_signals": 184,
+        "n_taken": 153,
+        "win_pct": 72.83,
+        "ret_pct": 30.69,
+        "max_dd_pct": -6.73
+      },
+      {
+        "year": 2024,
+        "n_signals": 400,
+        "n_taken": 190,
+        "win_pct": 63.5,
+        "ret_pct": 2.52,
+        "max_dd_pct": -18.89
+      },
+      {
+        "year": 2025,
+        "n_signals": 166,
+        "n_taken": 101,
+        "win_pct": 56.02,
+        "ret_pct": -11.97,
+        "max_dd_pct": -12.45
+      },
+      {
+        "year": 2026,
+        "n_signals": 133,
+        "n_taken": 85,
+        "win_pct": 52.63,
+        "ret_pct": 3.34,
+        "max_dd_pct": -5.45
+      }
+    ],
+    "exit_family": "hi7",
+    "stop_atr_mult": 4.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "stage2_base_breakout",
+    "title": "Stage 2 Base Breakout",
+    "family": "trend_continuation",
+    "coverage": "3yr",
+    "start_date": "2023-06-13",
+    "end_date": "2026-09-25",
+    "n_signals_raw": 7021,
+    "n_signals_fresh": 3261,
+    "n_signals_taken": 288,
+    "win_pct": 33.45,
+    "mean_ret_pct": 0.279,
+    "median_ret_pct": -3.885,
+    "stopped_pct": 4.85,
+    "capped_pct": 5.07,
+    "equity_multiplier": 0.912,
+    "cagr_pct": -4.02,
+    "max_dd_pct": -33.31,
+    "worst_year": {
+      "year": 2026,
+      "ret_pct": -11.83,
+      "max_dd_pct": -21.23
+    },
+    "best_year": {
+      "year": 2024,
+      "ret_pct": 4.24
+    },
+    "by_year": [
+      {
+        "year": 2024,
+        "n_signals": 1090,
+        "n_taken": 71,
+        "win_pct": 32.48,
+        "ret_pct": 4.24,
+        "max_dd_pct": -20.19
+      },
+      {
+        "year": 2025,
+        "n_signals": 1036,
+        "n_taken": 118,
+        "win_pct": 32.92,
+        "ret_pct": -0.8,
+        "max_dd_pct": -21.13
+      },
+      {
+        "year": 2026,
+        "n_signals": 1130,
+        "n_taken": 99,
+        "win_pct": 34.87,
+        "ret_pct": -11.83,
+        "max_dd_pct": -21.23
+      }
+    ],
+    "exit_family": "ema21",
+    "stop_atr_mult": 3.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "spring_reclaim",
+    "title": "Shakeout Reclaim",
+    "family": "mean_reversion",
+    "coverage": "3yr",
+    "start_date": "2023-06-13",
+    "end_date": "2026-09-25",
+    "n_signals_raw": 2942,
+    "n_signals_fresh": 1426,
+    "n_signals_taken": 654,
+    "win_pct": 60.8,
+    "mean_ret_pct": -0.121,
+    "median_ret_pct": 0.704,
+    "stopped_pct": 5.47,
+    "capped_pct": 5.75,
+    "equity_multiplier": 0.858,
+    "cagr_pct": -6.79,
+    "max_dd_pct": -25.57,
+    "worst_year": {
+      "year": 2024,
+      "ret_pct": -7.94,
+      "max_dd_pct": -13.67
+    },
+    "best_year": {
+      "year": 2025,
+      "ret_pct": 1.18
+    },
+    "by_year": [
+      {
+        "year": 2024,
+        "n_signals": 427,
+        "n_taken": 146,
+        "win_pct": 66.74,
+        "ret_pct": -7.94,
+        "max_dd_pct": -13.67
+      },
+      {
+        "year": 2025,
+        "n_signals": 550,
+        "n_taken": 294,
+        "win_pct": 60.0,
+        "ret_pct": 1.18,
+        "max_dd_pct": -15.26
+      },
+      {
+        "year": 2026,
+        "n_signals": 449,
+        "n_taken": 214,
+        "win_pct": 56.12,
+        "ret_pct": -7.94,
+        "max_dd_pct": -18.66
+      }
+    ],
+    "exit_family": "hi7",
+    "stop_atr_mult": 4.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "stage2_portfolio",
+    "title": "Stage 2 Portfolio",
+    "family": "trend_continuation",
+    "coverage": "3yr",
+    "start_date": "2023-06-13",
+    "end_date": "2026-09-25",
+    "n_signals_raw": 5726,
+    "n_signals_fresh": 3004,
+    "n_signals_taken": 288,
+    "win_pct": 32.94,
+    "mean_ret_pct": 0.091,
+    "median_ret_pct": -3.888,
+    "stopped_pct": 4.6,
+    "capped_pct": 5.24,
+    "equity_multiplier": 0.82,
+    "cagr_pct": -8.44,
+    "max_dd_pct": -42.34,
+    "worst_year": {
+      "year": 2026,
+      "ret_pct": -6.88,
+      "max_dd_pct": -26.17
+    },
+    "best_year": {
+      "year": 2024,
+      "ret_pct": -5.8
+    },
+    "by_year": [
+      {
+        "year": 2024,
+        "n_signals": 994,
+        "n_taken": 75,
+        "win_pct": 32.6,
+        "ret_pct": -5.8,
+        "max_dd_pct": -20.29
+      },
+      {
+        "year": 2025,
+        "n_signals": 956,
+        "n_taken": 118,
+        "win_pct": 32.74,
+        "ret_pct": -6.52,
+        "max_dd_pct": -23.82
+      },
+      {
+        "year": 2026,
+        "n_signals": 1049,
+        "n_taken": 95,
+        "win_pct": 33.46,
+        "ret_pct": -6.88,
+        "max_dd_pct": -26.17
+      }
+    ],
+    "exit_family": "ema21",
+    "stop_atr_mult": 3.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "smooth_momentum",
+    "title": "Smooth Momentum",
+    "family": "trend_continuation",
+    "coverage": "3yr",
+    "start_date": "2023-06-13",
+    "end_date": "2026-09-25",
+    "n_signals_raw": 38125,
+    "n_signals_fresh": 1798,
+    "n_signals_taken": 326,
+    "win_pct": 33.02,
+    "mean_ret_pct": 0.304,
+    "median_ret_pct": -2.709,
+    "stopped_pct": 2.56,
+    "capped_pct": 2.62,
+    "equity_multiplier": 0.815,
+    "cagr_pct": -8.72,
+    "max_dd_pct": -38.96,
+    "worst_year": {
+      "year": 2025,
+      "ret_pct": -23.93,
+      "max_dd_pct": -31.17
+    },
+    "best_year": {
+      "year": 2026,
+      "ret_pct": 9.71
+    },
+    "by_year": [
+      {
+        "year": 2024,
+        "n_signals": 821,
+        "n_taken": 85,
+        "win_pct": 33.37,
+        "ret_pct": -2.34,
+        "max_dd_pct": -17.01
+      },
+      {
+        "year": 2025,
+        "n_signals": 466,
+        "n_taken": 140,
+        "win_pct": 26.39,
+        "ret_pct": -23.93,
+        "max_dd_pct": -31.17
+      },
+      {
+        "year": 2026,
+        "n_signals": 509,
+        "n_taken": 101,
+        "win_pct": 38.51,
+        "ret_pct": 9.71,
+        "max_dd_pct": -13.32
+      }
+    ],
+    "exit_family": "ema21",
+    "stop_atr_mult": 3.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "ema21_pullback",
+    "title": "Pullback to the 21 EMA",
+    "family": "trend_continuation",
+    "coverage": "3yr",
+    "start_date": "2023-06-13",
+    "end_date": "2026-09-25",
+    "n_signals_raw": 28514,
+    "n_signals_fresh": 3900,
+    "n_signals_taken": 994,
+    "win_pct": 26.1,
+    "mean_ret_pct": -0.102,
+    "median_ret_pct": -1.569,
+    "stopped_pct": 0.13,
+    "capped_pct": 1.26,
+    "equity_multiplier": 0.651,
+    "cagr_pct": -16.52,
+    "max_dd_pct": -58.72,
+    "worst_year": {
+      "year": 2025,
+      "ret_pct": -35.75,
+      "max_dd_pct": -37.96
+    },
+    "best_year": {
+      "year": 2026,
+      "ret_pct": 14.78
+    },
+    "by_year": [
+      {
+        "year": 2024,
+        "n_signals": 1705,
+        "n_taken": 316,
+        "win_pct": 27.16,
+        "ret_pct": -11.66,
+        "max_dd_pct": -26.09
+      },
+      {
+        "year": 2025,
+        "n_signals": 1062,
+        "n_taken": 429,
+        "win_pct": 22.98,
+        "ret_pct": -35.75,
+        "max_dd_pct": -37.96
+      },
+      {
+        "year": 2026,
+        "n_signals": 1129,
+        "n_taken": 249,
+        "win_pct": 27.46,
+        "ret_pct": 14.78,
+        "max_dd_pct": -17.48
+      }
+    ],
+    "exit_family": "ema21",
+    "stop_atr_mult": 3.0,
+    "cost_rt": 0.5,
+    "notes": null
+  },
+  {
+    "name": "close_above_monthly_tc",
+    "title": "Above Monthly TC",
+    "family": "watchlist",
+    "coverage": "3yr",
+    "start_date": "2023-06-13",
+    "end_date": "2026-09-25",
+    "n_signals_raw": 382676,
+    "n_signals_fresh": 10393,
+    "n_signals_taken": 0,
+    "win_pct": null,
+    "mean_ret_pct": null,
+    "median_ret_pct": null,
+    "stopped_pct": null,
+    "capped_pct": null,
+    "equity_multiplier": null,
+    "cagr_pct": null,
+    "max_dd_pct": null,
+    "worst_year": null,
+    "best_year": null,
+    "by_year": [],
+    "exit_family": "none",
+    "stop_atr_mult": 0.0,
+    "cost_rt": 0.5,
+    "notes": "Watchlist: not traded, signal count only."
+  },
+  {
+    "name": "weekly_tc_reclaim",
+    "title": "Weekly TC Reclaim",
+    "family": "watchlist",
+    "coverage": "3yr",
+    "start_date": "2023-06-13",
+    "end_date": "2026-09-25",
+    "n_signals_raw": 184747,
+    "n_signals_fresh": 13783,
+    "n_signals_taken": 0,
+    "win_pct": null,
+    "mean_ret_pct": null,
+    "median_ret_pct": null,
+    "stopped_pct": null,
+    "capped_pct": null,
+    "equity_multiplier": null,
+    "cagr_pct": null,
+    "max_dd_pct": null,
+    "worst_year": null,
+    "best_year": null,
+    "by_year": [],
+    "exit_family": "none",
+    "stop_atr_mult": 0.0,
+    "cost_rt": 0.5,
+    "notes": "Watchlist: not traded, signal count only."
+  },
+  {
+    "name": "inside_bar_coil",
+    "title": "Inside-Bar Coil",
+    "family": "watchlist",
+    "coverage": "3yr",
+    "start_date": "2023-06-13",
+    "end_date": "2026-09-25",
+    "n_signals_raw": 14653,
+    "n_signals_fresh": 3806,
+    "n_signals_taken": 0,
+    "win_pct": null,
+    "mean_ret_pct": null,
+    "median_ret_pct": null,
+    "stopped_pct": null,
+    "capped_pct": null,
+    "equity_multiplier": null,
+    "cagr_pct": null,
+    "max_dd_pct": null,
+    "worst_year": null,
+    "best_year": null,
+    "by_year": [],
+    "exit_family": "none",
+    "stop_atr_mult": 0.0,
+    "cost_rt": 0.5,
+    "notes": "Watchlist: not traded, signal count only."
+  },
+  {
+    "name": "narrow_cpr_breakout",
+    "title": "Narrow CPR Breakout",
+    "family": "watchlist",
+    "coverage": "3yr",
+    "start_date": "2023-06-13",
+    "end_date": "2026-09-25",
+    "n_signals_raw": 27695,
+    "n_signals_fresh": 4394,
+    "n_signals_taken": 0,
+    "win_pct": null,
+    "mean_ret_pct": null,
+    "median_ret_pct": null,
+    "stopped_pct": null,
+    "capped_pct": null,
+    "equity_multiplier": null,
+    "cagr_pct": null,
+    "max_dd_pct": null,
+    "worst_year": null,
+    "best_year": null,
+    "by_year": [],
+    "exit_family": "none",
+    "stop_atr_mult": 0.0,
+    "cost_rt": 0.5,
+    "notes": "Watchlist: not traded, signal count only."
+  },
+  {
+    "name": "accumulation_thrust",
+    "title": "Quiet Accumulation",
+    "family": "watchlist",
+    "coverage": "3yr",
+    "start_date": "2023-06-13",
+    "end_date": "2026-09-25",
+    "n_signals_raw": 7050,
+    "n_signals_fresh": 1831,
+    "n_signals_taken": 0,
+    "win_pct": null,
+    "mean_ret_pct": null,
+    "median_ret_pct": null,
+    "stopped_pct": null,
+    "capped_pct": null,
+    "equity_multiplier": null,
+    "cagr_pct": null,
+    "max_dd_pct": null,
+    "worst_year": null,
+    "best_year": null,
+    "by_year": [],
+    "exit_family": "none",
+    "stop_atr_mult": 0.0,
+    "cost_rt": 0.5,
+    "notes": "Watchlist: not traded, signal count only."
+  }
+]

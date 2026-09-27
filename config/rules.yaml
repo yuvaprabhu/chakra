@@ -1,0 +1,1224 @@
+# Screens. Expressions evaluate against feature-frame columns via df.eval.
+# Levels (m_/w_/d_ prefixes) come from the last FULLY CLOSED period.
+#
+# BASIS RULE: one basis, everywhere. Every indicator and every level is
+# computed on the back-adjusted series, so every comparison uses `adj_close`.
+# `close` (raw) is never compared against a level: the raw series breaks at a
+# corporate action, which puts last period's level a whole split factor away
+# from this period's price - Krishana Phoschem's June pivots printed near 900
+# against a 180 stock. Raw prices are kept for turnover and for cross-checking
+# the adjusted series, not for arithmetic that spans a period boundary.
+#
+# Each screen carries horizon / origin / why / manage so the app can explain the
+# setup rather than just list names. None of this is a recommendation; a screen
+# states conditions, it has no view on what happens next.
+
+# ---------------------------------------------------------------- swing setups
+
+- name: minervini_trend_template
+  title: Stage 2 Uptrend
+  horizon: Positional - weeks to months
+  origin: Mark Minervini's Trend Template
+  description: >
+    The eight-point filter for a stock in a confirmed Stage 2 advance: price
+    above the 50, 150 and 200-day averages, the 150 above the 200, the 200
+    itself rising, price well off its 52-week low and close to its high, and
+    relative strength in the top third of the market.
+  why: >
+    Minervini's argument is that almost all large winners spend their advance
+    above these averages, so the template is a filter for where to look rather
+    than a trigger. It removes basing and declining stocks before any pattern
+    work begins.
+  manage: >
+    Conventionally used as a universe filter, not an entry. Traders then wait
+    for a tight consolidation and buy the breakout from it.
+  expr: >
+    adj_close > sma_50 and adj_close > sma_150 and adj_close > sma_200
+    and sma_50 > sma_150 and sma_150 > sma_200 and sma_200_slope > 0
+    and pct_from_52w_low > 30 and pct_from_52w_high > -25
+    and rs_rank >= 70
+  emit: [adj_close, rs_rank, pct_from_52w_high, pct_from_52w_low, sma_200_slope, ret_60d]
+  sort_by: rs_rank
+
+- name: vcp_squeeze
+  title: Volatility Contraction
+  horizon: Swing - days to weeks
+  origin: Minervini's VCP, via the tightening-base idea in O'Neil's work
+  description: >
+    Three consecutive ten-session ranges, each tighter than the one before,
+    the last of them under eight percent wide, with volume drying up and price
+    holding a shallow base near its highs.
+  why: >
+    Contracting range with falling volume says supply is being exhausted:
+    sellers who wanted out are out. The sequence is the pattern - Minervini's
+    point is that each pullback must be shallower than the last. A single
+    "tighter now than before" ratio is not the same test and passes whenever
+    the earlier window happened to be wide.
+  manage: >
+    The conventional entry is the break of the base's high on expanding volume;
+    the stop sits under the final, tightest contraction.
+  expr: >
+    adj_close > sma_50 and sma_50 > sma_200 and sma_200_slope > 0
+    and contract_seq == 1 and contract_ratio < 0.7 and tightness < 8
+    and vol_dryup < 0.9 and base_depth > -12 and rs_rank >= 60
+  emit: [adj_close, contract_a, contract_b, contract_c, contract_ratio, vol_dryup, base_depth, rs_rank]
+  sort_by: contract_ratio
+  ascending: true
+  min_history: 60
+
+- name: ema21_pullback
+  title: Pullback to the 21 EMA
+  horizon: Swing - 5 to 15 sessions
+  origin: The trend-continuation pullback, the most widely taught swing setup
+  description: >
+    An established uptrend where price has come back to the 21-day EMA rather
+    than breaking down: still above the 50-day, still above the 200-day, RSI
+    cooled but not broken.
+  why: >
+    A trend rarely runs without pausing. Buying the pause rather than the
+    breakout gives a tighter stop, which is where most of the edge in this setup
+    actually lives - the risk is small, not the win rate large.
+  manage: >
+    Usually entered on a reversal candle at the average, with the stop under the
+    pullback low. If price closes below the 50-day the premise is gone.
+  expr: >
+    adj_close > sma_50 and sma_50 > sma_200 and sma_200_slope > 0
+    and dist_ema_21 > -4 and dist_ema_21 < 1.5
+    and ext_ema21_15 >= 5 and off_high_10 < -2
+    and rsi_14 > 40 and rsi_14 < 62 and ret_60d > 8
+  emit: [adj_close, dist_ema_21, ext_ema21_15, off_high_10, rsi_14, ret_20d, rs_rank]
+  sort_by: rs_rank
+
+- name: high_tight_breakout
+  title: Breakout at 52-Week High
+  horizon: Swing - days to weeks
+  origin: Darvas boxes, and O'Neil's new-high buying
+  description: >
+    Price is within three percent of its 52-week high, breaking out on volume
+    at least one and a half times its twenty-day average.
+  why: >
+    A stock at a new high has no overhead supply: nobody above is waiting to
+    get out at break-even. Darvas traded almost nothing else. The volume
+    condition separates a real breakout from a drift.
+  manage: >
+    Typically bought on the breakout day or the first tight day after it, with
+    the stop below the box that was broken.
+  expr: >
+    adj_close > hi_250_prior and vol_ratio > 1.5 and ret_1d > 1
+    and adj_close > sma_50 and rs_rank >= 60
+  emit: [adj_close, pct_from_52w_high, vol_ratio, ret_1d, rs_rank, high_52w]
+  sort_by: vol_ratio
+
+- name: inside_bar_coil
+  title: Inside-Bar Coil
+  horizon: Swing - entry within days
+  origin: The NR7 / inside-bar squeeze
+  description: >
+    Today's entire range sits inside yesterday's, in a stock that is trending
+    and already tight.
+  why: >
+    An inside bar is a one-day standoff: neither side could extend the range.
+    After a run, it usually resolves in the direction of the trend, and it gives
+    an unusually well-defined stop.
+  manage: >
+    Entry on a break of the inside bar's high, stop under its low. Small risk
+    per trade is the whole point; it fails often and cheaply.
+  expr: >
+    inside_bar == 1 and adj_close > sma_20 and sma_20 > sma_50
+    and sma_50 > sma_200 and atr_pct < 5 and rs_rank >= 50
+  emit: [adj_close, atr_pct, rsi_14, ret_20d, rs_rank]
+  sort_by: rs_rank
+  min_history: 60
+
+# ------------------------------------------------------------- pivot and range
+
+- name: close_above_monthly_tc
+  title: Above Monthly TC
+  horizon: Positional - the month ahead
+  origin: Central Pivot Range, floor-trader pivots
+  description: >
+    Close reclaims the top of last month's Central Pivot Range, with the
+    50-day average beneath it.
+  why: >
+    The CPR summarises last month into three lines. Trading above the top one
+    means the month opened on the bullish side of its own prior value area,
+    which is the bias most CPR traders start from.
+  manage: >
+    Usually held while price stays above the monthly TC; a close back inside the
+    range ends the premise.
+  expr: "adj_close > m_cpr_tc and adj_close > sma_50"
+  emit: [adj_close, m_cpr_tc, m_cpr_bc, m_cpr_width, rsi_14]
+  sort_by: ret_20d
+
+- name: narrow_cpr_breakout
+  title: Narrow CPR Breakout
+  horizon: Swing - the next few sessions
+  origin: Narrow-CPR expansion
+  description: >
+    Last month's Central Pivot Range was unusually narrow and price is now
+    trading above it, with the 200-day beneath.
+  why: >
+    A narrow CPR means last month closed near its own average - agreement,
+    little trend. Ranges that tight tend to be followed by expansion, and the
+    direction of the break is the tell.
+  manage: >
+    Traded as a breakout: entry above TC, invalidated on a close back below BC.
+  expr: >
+    m_cpr_width < 2.0 and m_cpr_width_rank < 0.34
+    and adj_close > m_cpr_tc and since_m_cpr_tc_cross <= 5
+    and adj_close > sma_200
+  emit: [adj_close, m_cpr_tc, m_cpr_width, m_cpr_width_rank, since_m_cpr_tc_cross, ret_20d, vol_ratio]
+  sort_by: m_cpr_width
+  ascending: true
+
+- name: weekly_tc_reclaim
+  title: Weekly TC Reclaim
+  horizon: Swing - within the week
+  origin: Weekly CPR
+  description: >
+    Close above last week's CPR top, with the 20-day average rising beneath it
+    and the week so far positive.
+  why: >
+    A shorter-horizon version of the monthly rule, for traders who work the
+    week rather than the month.
+  manage: >
+    Held while above the weekly TC; reassessed each Monday when the level moves.
+  expr: >
+    adj_close > w_cpr_tc and since_w_cpr_tc_cross <= 3
+    and adj_close > sma_20 and ret_5d > 0
+  emit: [adj_close, w_cpr_tc, w_cpr_width, since_w_cpr_tc_cross, ret_5d, rsi_14]
+  sort_by: ret_5d
+
+# ------------------------------------------------------------------ flow-based
+
+- name: volume_shocker
+  title: Volume Shockers
+  horizon: Short term - hours to days
+  origin: Unusual-volume scanning
+  description: >
+    Volume at more than three times its twenty-day average on an up day, with
+    price above the 20-day.
+  why: >
+    Volume is the one input that cannot be drawn on a chart after the fact.
+    A three-fold day means participation changed, which either confirms a move
+    or front-runs news. It is a prompt to look, not a setup on its own.
+  manage: >
+    Most traders wait for the day after: a hold of the spike's range is
+    constructive, an immediate give-back is not.
+  expr: "vol_ratio > 3 and ret_1d > 2 and adj_close > sma_20"
+  emit: [adj_close, vol_ratio, volume, vol_sma_20, ret_1d, turnover_median_20d]
+  sort_by: vol_ratio
+  min_history: 60
+
+- name: momentum_leaders
+  title: Momentum Leaders
+  horizon: Positional - months
+  origin: Cross-sectional momentum, the most replicated anomaly in the literature
+  description: >
+    Strong over one, three and six months at once, with the 50-day above the
+    200-day.
+  why: >
+    Relative momentum persists over three to twelve-month horizons across almost
+    every market studied. Requiring several windows at once filters out a single
+    lucky month.
+  manage: >
+    Usually held on a rebalance schedule rather than a stop, and exited when the
+    name drops out of the leadership group.
+  expr: >
+    mom_12_1 > 15 and ret_60d > 12 and ret_120d > 15
+    and adj_close > sma_50 and sma_50 > sma_200
+  emit: [adj_close, mom_12_1, ret_60d, ret_120d, rsi_14, pct_from_52w_high]
+  sort_by: ret_60d
+
+- name: oversold_in_uptrend
+  title: Oversold in Uptrend
+  horizon: Swing - mean reversion, days
+  origin: RSI mean reversion inside a trend
+  description: >
+    RSI below 35 while price still holds above the 200-day average and the
+    six-month return is positive.
+  why: >
+    Mean reversion works far better inside an uptrend than against one. The
+    200-day condition is what separates a pullback from a breakdown; without it
+    this screen simply finds falling stocks.
+  manage: >
+    Short leash. The premise is a bounce, so it is usually abandoned quickly if
+    one does not come.
+  expr: "rsi_14 < 35 and adj_close > sma_200 and ret_120d > 0"
+  emit: [adj_close, rsi_14, sma_200, ret_20d, pct_from_52w_high]
+  sort_by: rsi_14
+  ascending: true
+
+- name: trend_stack
+  title: Full Trend Stack
+  horizon: Positional
+  origin: Moving-average ribbon alignment
+  description: >
+    Price above the 20, the 20 above the 50, the 50 above the 200, with RSI not
+    yet stretched.
+  why: >
+    Every timeframe pointing the same way. A coarse but honest health check
+    rather than a trigger - it tells you the trend is intact, not that now is
+    the moment.
+  manage: >
+    Used as a backdrop filter for other setups more often than traded directly.
+  expr: >
+    adj_close > sma_20 and sma_20 > sma_50 and sma_50 > sma_200
+    and rsi_14 < 70
+  emit: [adj_close, sma_20, sma_50, sma_200, rsi_14, ret_60d]
+  sort_by: ret_60d
+
+# --------------------------------------------------- monthly pivot expansion
+# The monthly R1 pair. A pivot level is only interesting the day it gives way
+# and the day it is defended; the rest of the time it is just a number, which
+# is why both of these test a crossing rather than a position.
+
+- name: monthly_r1_breakout
+  title: Monthly R1 Breakout
+  horizon: Swing - the next 5 to 15 sessions
+  origin: Floor-trader pivots, monthly timeframe
+  description: >
+    Price has closed above last month's first resistance pivot within the last
+    three sessions, on volume above its twenty-day average, with the 50-day
+    average beneath.
+  why: >
+    R1 is the level the month's own range projects as the first place supply
+    should appear. Clearing it says the projection was wrong on the low side -
+    the month is trading beyond what last month's range accounted for. On the
+    monthly timeframe there is only one such crossing per leg, which is what
+    makes it worth watching rather than a number price wanders across.
+  manage: >
+    Conventionally entered on the close above R1 or the first tight day after
+    it, stop back under R1, with monthly R2 as the mechanical first target.
+  expr: >
+    adj_close > m_r1 and since_m_r1_cross <= 3
+    and vol_ratio > 1.3 and adj_close > sma_50 and sma_50 > sma_200
+  emit: [adj_close, m_r1, m_r2, dist_m_r1, since_m_r1_cross, vol_ratio, ret_5d]
+  sort_by: since_m_r1_cross
+  ascending: true
+  min_history: 60
+
+- name: monthly_r1_retest
+  title: Monthly R1 Retest
+  horizon: Swing - entry within days
+  origin: Broken-resistance-becomes-support, on the monthly pivot
+  description: >
+    Price broke above last month's R1 in the past two to fifteen sessions, has
+    come back to touch it within one percent, and is still closing above it.
+  why: >
+    The retest is the part of a pivot break that carries the risk definition.
+    Buying the break means guessing; waiting for price to return to the level
+    and hold turns R1 into a floor you can put a stop under, and gives a losing
+    trade a small, immediate answer rather than a slow one.
+  manage: >
+    Entry on the hold of the level, stop a little under it. A close back below
+    R1 ends the premise outright - that is the breakdown point for this setup.
+  expr: >
+    dist_m_r1 > 0 and low3_dist_m_r1 < 1.0 and low3_dist_m_r1 > -2.5
+    and since_m_r1_cross >= 2 and since_m_r1_cross <= 15
+    and adj_close > sma_50 and sma_50 > sma_200
+  emit: [adj_close, m_r1, dist_m_r1, low3_dist_m_r1, since_m_r1_cross, rsi_14, ret_5d]
+  sort_by: dist_m_r1
+  ascending: true
+  min_history: 60
+
+# ------------------------------------------------------------- base and break
+
+- name: pocket_pivot
+  title: Pocket Pivot
+  horizon: Swing - days to weeks
+  origin: Gil Morales and Chris Kacher, "Trade Like an O'Neil Disciple"
+  description: >
+    An up day whose volume is larger than every DOWN day's volume in the prior
+    ten sessions, inside a shallow base in an uptrend.
+  why: >
+    Comparing today's buying against the last ten days of SELLING is the whole
+    idea. It is a way to see institutional accumulation starting inside a base,
+    before the breakout that everyone else is waiting for, which is why it
+    tends to fire earlier and at lower risk than a new-high buy.
+  manage: >
+    Bought on the pivot day itself, stop under the base's low or the 50-day
+    average, whichever is tighter. It fails when the base fails.
+  expr: >
+    pocket_pivot == 1 and adj_close > sma_50 and sma_50 > sma_200
+    and sma_200_slope > 0 and base_depth > -15
+    and dist_sma_10 < 5 and dist_sma_10 > -5 and rs_rank >= 50
+  emit: [adj_close, volume, down_vol_max_10, base_depth, dist_sma_10, rs_rank]
+  sort_by: rs_rank
+  min_history: 60
+
+- name: donchian_breakout
+  title: 20-Day Donchian Breakout
+  horizon: Positional - trend following, weeks
+  origin: The Turtle system's entry channel; Donchian's original rule
+  description: >
+    Today's close is above the highest close of the prior twenty sessions, in a
+    stock already above its long averages and with enough daily range to move.
+  why: >
+    This is the most-tested breakout rule in existence and the one least
+    dependent on interpretation - there is no pattern to see, only a number to
+    exceed. Its edge has always come from a small number of very large trends,
+    not from hit rate, and it should be read that way.
+  manage: >
+    The Turtles exited on a ten-day low and sized by ATR. Both matter more than
+    the entry; without a trailing exit this rule has no system around it.
+  expr: >
+    adj_close > hi_20_prior and adj_close > sma_50 and sma_50 > sma_200
+    and vol_ratio > 1.2 and atr_pct > 1.5 and rs_rank >= 50
+  emit: [adj_close, hi_20_prior, vol_ratio, atr_pct, ret_20d, rs_rank]
+  sort_by: rs_rank
+  min_history: 60
+
+- name: three_weeks_tight
+  title: Three Weeks Tight
+  horizon: Swing - entry on the break, days
+  origin: Minervini and O'Neil's "3 weeks tight" continuation pattern
+  description: >
+    Three weeks of closes within two and a half percent of each other, near
+    the highs, in a leading stock.
+  why: >
+    After an advance, three weeks of going nowhere with no give-back is a
+    refusal to sell. The pattern is prized because the stop is absurdly tight -
+    the entire risk is the width of the tightness itself.
+  manage: >
+    Bought above the high of the tight range. A close below the range's low is
+    the breakdown point and is usually a small loss by construction.
+  expr: >
+    tight_3w_pct < 1.5 and adj_close > sma_50 and sma_50 > sma_200
+    and sma_200_slope > 0 and pct_from_52w_high > -15 and rs_rank >= 60
+  emit: [adj_close, tight_3w_pct, pct_from_52w_high, vol_dryup, ret_60d, rs_rank]
+  sort_by: tight_3w_pct
+  ascending: true
+  min_history: 60
+
+- name: stage2_base_breakout
+  title: Stage 2 Base Breakout
+  horizon: Positional - months
+  origin: Stan Weinstein's Stage Analysis, 30-week moving average
+  description: >
+    Price clears the highest close of the last sixty sessions - roughly a
+    quarter's worth of base - on volume half again its average, above a rising
+    200-day average.
+  why: >
+    Weinstein's argument is that a stock moves through four stages and that
+    only Stage 2 is worth owning. The breakout from a long base above a rising
+    30-week average is his definition of that transition, and the volume
+    condition is what distinguishes it from drift.
+  manage: >
+    Held for the stage, not the swing; the conventional exit is a close below
+    the 30-week average or a break of the breakout level on volume.
+  expr: >
+    adj_close > hi_60_prior and adj_close > sma_150 and sma_150_slope > 0
+    and adj_close > sma_200 and vol_ratio > 1.5 and rs_rank >= 60
+  emit: [adj_close, hi_60_prior, vol_ratio, sma_150_slope, ret_120d, rs_rank]
+  sort_by: vol_ratio
+  min_history: 90
+
+- name: episodic_pivot
+  title: Episodic Pivot
+  horizon: Short term - days
+  origin: Pradeep Bonde (Stockbee); the "surprise" gap
+  description: >
+    A gap up of more than four percent on at least four times average volume,
+    closing in the upper part of the day's range.
+  why: >
+    An episodic pivot is a gap that is caused by something - a result, an
+    order, a change of story - rather than by drift. The gap is the signature
+    of information arriving overnight, and the close near the high says the
+    market spent the whole session refusing to give it back.
+  manage: >
+    A watchlist signal, not a buy-the-open signal. The gap day's LOW is the
+    structure this setup gives you - everyone who bought the news is above it -
+    so that is the stop, and filling the gap means the premise is wrong.
+
+    Measured over 343 signals, three entries with that same stop and a 2R
+    target: buying the next open returns +0.195R per signal with 7.5% risk;
+    WAITING for a pullback to the gap day's close returns +0.346R with 6.7%
+    risk and still fills 88% of the time. Waiting for a break of the gap day's
+    HIGH is the worst of the three at +0.145R - it only sets up 62% of the time
+    and buying the high against a stop at the low makes R an 11.5% monster.
+    The lesson is to enter nearer the stop, not to wait for more confirmation.
+  expr: >
+    gap_pct > 4 and vol_ratio > 4 and close_pos > 0.6 and adj_close > sma_50
+  emit: [adj_close, gap_pct, vol_ratio, close_pos, ret_1d, turnover_median_20d]
+  sort_by: gap_pct
+  min_history: 60
+
+- name: rsi2_reversion
+  title: RSI(2) Snapback
+  horizon: Short term - 2 to 5 sessions
+  origin: Larry Connors' short-term mean reversion research
+  description: >
+    A two-period RSI below eight in a stock still above both its 50 and 200-day
+    averages.
+  why: >
+    RSI(2) is built to saturate. Connors' finding was that in an established
+    uptrend, the extreme readings mark short-lived exhaustion rather than
+    damage, and that the shorter the lookback the cleaner the effect. The
+    trend filters are not optional - without them this buys falling knives.
+  manage: >
+    Explicitly a short hold. The published rule exits on a close above the
+    5-day average rather than on a target or a stop.
+  expr: >
+    rsi_2 < 8 and adj_close > sma_200 and adj_close > sma_50
+    and sma_200_slope > 0 and ret_120d > 0
+  emit: [adj_close, rsi_2, rsi_14, dist_sma_50, ret_120d, pct_from_52w_high]
+  sort_by: rsi_2
+  ascending: true
+  min_history: 200
+
+- name: r1_breakout_retest
+  title: R1 Breakout, Then Retest
+  horizon: Swing - entry on the hold, days
+  origin: Pivot breakout with volume confirmation, entered on the pullback
+  description: >
+    Price cleared last month's R1 on volume above its own 21-day average within
+    the last two to fifteen sessions, and has now pulled back to touch either
+    that R1 level or the 9 EMA, still closing above both.
+  why: >
+    Two separate things have to be true, and the order matters. The breakout is
+    only worth anything if volume showed up on the day it happened - a drift
+    across a pivot on average volume is not supply changing hands. And the
+    breakout itself is a poor entry: it is the widest point from any sensible
+    stop. The pullback is where the trade becomes definable, because price
+    returns to a level you can put a stop under.
+
+    Which pullback depends on how strong the move was. A merely decent breakout
+    hands R1 back and retests it. A strong one never does - it pulls in to the
+    9 EMA instead and turns from there. Requiring only the first would discard
+    the better half of the setups, so either qualifies.
+  manage: >
+    Entry on the hold of whichever level was touched, stop a little under it.
+    A close back below R1 ends the premise - that level is what the whole setup
+    was built on. Measured on the sibling Episodic Pivot screen, entering near
+    the stop on a pullback roughly doubled expectancy against buying the
+    breakout day, which is the same reasoning applied here.
+  expr: >
+    since_r1_vol_breakout >= 2 and since_r1_vol_breakout <= 15
+    and adj_close > m_r1 and adj_close > ema_9
+    and (
+      (low3_dist_m_r1 < 1.0 and low3_dist_m_r1 > -2.5)
+      or (low3_dist_ema_9 < 1.0 and low3_dist_ema_9 > -2.5)
+    )
+    and sma_50 > sma_200
+  emit: [adj_close, m_r1, dist_m_r1, low3_dist_m_r1, low3_dist_ema_9,
+         since_r1_vol_breakout, vol_vs_ema21, rsi_14]
+  sort_by: since_r1_vol_breakout
+  ascending: true
+  min_history: 60
+
+# ------------------------------------------------- built against the fakeout
+# Three screens whose whole design is to not be the one holding the bag when a
+# breakout fails. Each attacks it differently: the first waits for the stop run
+# to happen and fail, the second refuses to buy a break until it has survived
+# time, the third requires sustained volume rather than one exciting day.
+
+- name: spring_reclaim
+  title: Shakeout Reclaim
+  horizon: Swing - entry within days of the reclaim
+  origin: Wyckoff's spring; Linda Raschke's Turtle Soup
+  description: >
+    Price broke below its twenty-day low - where the obvious stops sit - and
+    closed back above that low the same session, in the upper half of the day's
+    range, inside a longer uptrend.
+  why: >
+    The stop run is the setup, not the hazard. A break of an obvious low pulls
+    in breakout sellers and triggers resting stops; when the session closes
+    back above that low, every one of those sellers is offside and the supply
+    underneath has been spent in public. The low it happened on is a floor that
+    has been TESTED rather than assumed, which is exactly what an ordinary
+    support level is not.
+  manage: >
+    Entry on the reclaim or the first day that holds above it. Stop under the
+    shakeout low - and this screen requires that low to sit at least 1.5 ATR
+    away, so routine noise cannot reach it. If it goes, the absorption failed
+    and the premise is gone.
+  expr: >
+    since_spring <= 3 and adj_close > lo_20_prior
+    and atr_to_spring >= 1.5
+    and adj_close > sma_200 and sma_200_slope > 0
+    and ud_vol_20 > 1.0 and rs_rank >= 45
+  emit: [adj_close, spring_low, dist_spring_low, atr_to_spring, since_spring,
+         ud_vol_20, close_pos, rs_rank]
+  sort_by: since_spring
+  ascending: true
+  min_history: 200
+
+- name: held_breakout
+  title: Breakout That Held
+  horizon: Positional - weeks
+  origin: Breakout confirmation by time rather than by price
+  description: >
+    Price cleared its sixty-day high three to fifteen sessions ago on volume
+    above its own average, and since that day the lowest low has never returned
+    to the breakout level - nobody who bought the break has been stopped out.
+  why: >
+    A failed breakout announces itself quickly: it gives the level back within
+    a session or three. Rather than guess in advance which break is real, this
+    waits and checks. The lowest low since the cross is the entire test, and it
+    is a fact rather than a forecast.
+
+    The cost is obvious and worth stating: you buy higher than the breakout
+    buyer did. What you get for it is a setup where the invalidation level has
+    already been defended, and a stop under it that the market has shown it
+    does not want to visit.
+  manage: >
+    Stop under the breakout level itself, which by construction has held since
+    the break. A close back below it means the confirmation was wrong, which is
+    a cheap and quick answer.
+  expr: >
+    since_brk_60 >= 3 and since_brk_60 <= 15
+    and brk_cushion > 0 and closes_above_brk >= 3
+    and brk_vol > 1.0 and adj_close > brk_level
+    and sma_50 > sma_200 and rs_rank >= 55
+  emit: [adj_close, brk_level, brk_cushion, closes_above_brk, since_brk_60,
+         brk_vol, rs_rank]
+  sort_by: brk_cushion
+  min_history: 90
+
+- name: accumulation_thrust
+  title: Quiet Accumulation
+  horizon: Positional - weeks to months
+  origin: O'Neil's up/down volume ratio; volume asymmetry over a spike
+  description: >
+    Over the last twenty sessions, volume on up days outweighed volume on down
+    days by more than half again, price is holding its highs with closes in the
+    upper part of each day's range, and the range is contracting.
+  why: >
+    A single huge volume day is news, and news reverses. Twenty sessions of
+    buyers consistently outweighing sellers is a position being built, and a
+    position being built does not unwind because a level got poked. The
+    contracting range says the buying is being done without chasing, which is
+    what institutional accumulation looks like from the outside.
+  manage: >
+    There is no single trigger bar here, so no single stop. Conventionally used
+    as the filter you apply BEFORE taking any breakout or pullback entry in the
+    name - the ratio dropping below 1 is what ends it.
+  expr: >
+    ud_vol_20 > 1.5 and close_pos_3 > 0.55
+    and adj_close > sma_50 and sma_50 > sma_200 and sma_200_slope > 0
+    and base_depth > -10 and atr_ratio_60 < 1.0 and rs_rank >= 60
+  emit: [adj_close, ud_vol_20, close_pos_3, base_depth, atr_ratio_60, rs_rank]
+  sort_by: ud_vol_20
+  min_history: 200
+
+- name: near_52w_high
+  title: Holding the 52-Week High
+  horizon: Positional - months
+  origin: George & Hwang (2004); validated for India by Raju (2023), SSRN 4587697
+  description: >
+    Price sits within twelve percent of its fifty-two week high, above a rising
+    set of averages, with relative strength in the top fifth of the market.
+  why: >
+    The signal is PROXIMITY to the high, not the size of the return that got
+    there. George and Hwang's finding, replicated on Indian equities by Raju
+    over 2004-2023, is that nearness to the 52-week high predicts returns
+    better than academic momentum does, with a higher Sharpe and weaker
+    long-term reversal - the part of momentum that hurts most.
+
+    The behavioural story is anchoring: the 52-week high is the number everyone
+    remembers, so it acts as a ceiling traders under-react to, and the
+    under-reaction resolves upward.
+  manage: >
+    A ranking signal on a monthly horizon, not a trigger. The research holds it
+    as a portfolio rebalanced periodically, not as an entry with a stop - which
+    is also why it scores poorly in the 1:2 bracket table on this page. The
+    bracket is the wrong instrument for it, and that is a statement about the
+    measurement, not about the effect.
+  expr: >
+    pct_from_52w_high > -12 and adj_close > sma_50 and sma_50 > sma_200
+    and sma_200_slope > 0 and rs_rank >= 80
+  emit: [adj_close, pct_from_52w_high, high_52w, ret_250d, mom_12_1, rs_rank]
+  sort_by: pct_from_52w_high
+  min_history: 250
+
+- name: base_breakout_r1
+  title: Quarter Base, R1 Break
+  horizon: Swing to positional - weeks
+  origin: Weinstein's Stage 1 to Stage 2 transition, triggered on the monthly pivot
+  description: >
+    A stock that spent the last three months inside a range narrower than
+    twenty-five percent, sitting in the lower half of its fifty-two week range,
+    that has now closed above last month's R1 on volume above its own average.
+  why: >
+    A long quiet base is where ownership changes hands without a price being
+    paid for it. The people who wanted out after the decline are out, and the
+    range stops widening because nobody left is forced to sell. That is the
+    setup; the pivot break is only the trigger that says the balance has
+    tipped.
+
+    Requiring the base to sit in the LOWER half of the 52-week range is what
+    separates this from a continuation pattern. A tight range near the highs is
+    a different animal with a different failure mode - this one is buying a
+    turn, not a trend.
+  manage: >
+    Stop under the base's low, which is the level the whole quarter defended.
+    That is usually a long way down, so this is a small-size, wide-stop trade
+    rather than a tight one - and a 3% stop will not survive inside a base that
+    is 25% wide.
+  expr: >
+    base_range_60 < 25 and pct_from_52w_low < 45
+    and adj_close > m_r1 and since_r1_vol_breakout <= 5
+    and adj_close > sma_50 and sma_200_slope > -3
+  emit: [adj_close, m_r1, base_range_60, pct_from_52w_low, since_r1_vol_breakout,
+         vol_vs_ema21, sma_200_slope]
+  sort_by: base_range_60
+  ascending: true
+  min_history: 250
+
+- name: stage2_portfolio
+  title: Stage 2 Portfolio
+  horizon: Positional - held one month, rebalanced monthly, no stop
+  origin: Weinstein Stage 2 base breakout, traded as a portfolio rather than a bracket
+  description: >
+    The Stage 2 base breakout - a close above the highest high of the last
+    sixty sessions on volume, above a rising 30-week average - restricted to
+    breaks that did not gap more than two percent and came from a base no
+    deeper than ten percent. Meant to be held as a basket of up to twenty names
+    for one month and re-run, not as a single trade with a stop.
+  why: >
+    The same signal loses money as a stop-and-target trade and makes money as
+    a monthly portfolio, on the same data. The difference is the exit. The
+    median stock here moves 3.5% on an ordinary day, so any stop inside that
+    range is hit by noise before the thesis resolves; holding twenty names at
+    five percent each and rebalancing on the calendar is the risk control that
+    does not throw the winners away.
+
+    Of twelve confirmation filters tested on top of the base setup, skipping
+    the gap-up entries was the only one that helped in both time windows and
+    on two different base setups. The others - accumulation, pocket pivots,
+    strong closes, relative strength - either did nothing or cut the sample
+    without adding return.
+  manage: >
+    Run on the first session of each month. Hold the top twenty by the sort,
+    equal weight, for the month. No stop. A name that no longer qualifies at
+    the next rebalance is sold; one that still qualifies is kept. Position
+    size is the risk control: at five percent per name, one halving costs the
+    book 2.5%. Out of sample this beat the equal-weight universe by 2 to 4
+    percent a month and in 83 to 100 percent of months, over twelve months -
+    a short record, and one measured without costs on a universe that
+    flatters every long strategy.
+  expr: >
+    adj_close > hi_60_prior and adj_close > sma_150 and sma_150_slope > 0
+    and adj_close > sma_200 and vol_ratio > 1.5 and rs_rank >= 60
+    and gap_pct <= 2 and base_depth > -10
+  emit: [adj_close, hi_60_prior, vol_ratio, gap_pct, base_depth, sma_150_slope, rs_rank]
+  sort_by: vol_ratio
+  min_history: 200
+
+# ------------------------------------------------------ from the literature
+
+- name: double_seven
+  title: Double Seven
+  horizon: Short term - about two weeks, exit on the reversal
+  origin: Larry Connors and Cesar Alvarez, "Short Term Trading Strategies That Work" (2008)
+  description: >
+    A stock above its 200-day average has just closed below every one of its
+    previous seven closes. The exit is not a target or a stop - it is the
+    mirror image, a close above the previous seven closes.
+  why: >
+    Short-term reversal is the best-documented effect at the one-to-two-week
+    horizon, and this is its plainest expression: buy a fresh low inside an
+    uptrend, sell the fresh high that follows. The 200-day filter is what
+    keeps it from catching falling knives, and the reversal exit is what
+    separates it from every bracket on this page - it lets the trade take as
+    long as the reversal takes, rather than cutting it at an arbitrary
+    distance that sits inside one ordinary day's range.
+
+    On this universe it is the only system that wins by every measure at
+    once: 66% of trades, 80% of months, a profit factor near 1.5, and it does
+    so with no stop at all. Its risk is a position that keeps making new lows;
+    the 20-session time exit is the only protection, and position size the
+    only other one.
+  manage: >
+    Enter at the next open after the signal. Exit at the next open after any
+    close above the prior seven closes, or after twenty sessions. One open
+    position per name. Size small and hold many, because there is no stop.
+    Measured net of 0.3% round-trip costs, out of sample.
+  expr: >
+    new_lo7 == 1 and adj_close > sma_200
+  emit: [adj_close, lo7_prior, hi7_prior, sma_200, rsi_2, rsi_14, ret_5d]
+  sort_by: rsi_2
+  ascending: true
+  min_history: 200
+
+- name: leader_dip
+  title: Leader Dip
+  horizon: Short term - about a week, exit on the reversal
+  origin: Connors' Double Seven and RSI(2), restricted to relative-strength leaders (this project's pullback lab)
+  description: >
+    A relative-strength leader (rank 80 or higher against every other stock,
+    price above the 200-day average) that has just closed at a new 7-day
+    closing low, or whose 2-period RSI has dropped below 10. Buy the dip
+    itself, the next open, without waiting for a confirmation candle.
+  why: >
+    Of 72 pullback definitions tested on this universe, the two oversold
+    triggers in leaders were the most consistent in both the learning and the
+    holdout period: about two thirds of trades win, roughly +1% per trade net
+    of costs, profit factor near 1.5. Who you buy mattered most (leaders beat
+    all uptrend stocks by 0.5 to 1.0% per trade), buying immediately beat
+    waiting for a reversal bar in every comparison, and the 7-day-high exit
+    beat a fixed hold. The dip definition itself mattered least.
+  manage: >
+    Enter at the next open. Exit at the next open after any close above the
+    prior seven closes, or after twenty sessions. No stop inside the trade;
+    every stop tighter than 15% lowered the return. Size across ten equal
+    slots; a 15% or 3x ATR level is a disaster stop only. One in ten trades
+    loses more than 8%.
+  expr: >
+    rs_rank >= 80 and adj_close > sma_200 and (new_lo7 == 1 or rsi_2 < 10)
+  emit: [adj_close, rs_rank, rsi_2, lo7_prior, hi7_prior, dist_sma_10, dist_sma_50, sma_150_slope, sma_200]
+  sort_by: rs_rank
+  ascending: false
+  min_history: 200
+
+- name: leader_dip_playbook
+  title: SW - Leader Dip Playbook
+  horizon: Short term - about a week and a half, exit on the reversal, hard stop under every trade
+  origin: This project's synthesis (Sep 2026) - Leader Dip plus the one filter that survived loss forensics
+  description: >
+    The Leader Dip (relative-strength rank 80 or higher, above the 200-day,
+    a new 7-day closing low or RSI(2) under 10) restricted to dips that have
+    NOT broken the 21-day EMA - the close is still at least 2.6 percent above
+    it. A dip that has already lost the 21 EMA is a breakdown, not a pullback.
+    The stop column is the 3 ATR level under the close; place it against the
+    actual fill.
+  why: >
+    Of 78 stock-level and 56 market-level features scored on 35,000 tagged
+    trades, distance above the 21 EMA was the cleanest filter that helped in
+    both halves of the sample: it keeps one signal in five and lifts the win
+    rate from 65 to 73-75 percent in each half, about +2.6 percent per trade
+    net. With a 3 ATR hard stop and ten equal slots the strategy compounded
+    at 48 percent a year with a 7 percent drawdown from June 2024 to
+    September 2026, positive in both halves, and stayed positive under 100
+    random slot orderings and 20 percent parameter changes. Every tighter stop
+    (3, 5, 8, 10 percent, 2 ATR) lost money in the first half.
+  manage: >
+    Only when the market gate is on - more than half the universe above its
+    50-day average (off only under 40 percent), or within 126 sessions of a
+    Zweig breadth thrust. Buy the next open. Stop at fill minus 3 ATR(14),
+    placed on fill, never widened, never moved to breakeven. Exit at the next
+    open after any close above the prior seven closes, or at the close of the
+    twentieth session. Ten equal slots, highest RS rank first, one position
+    per stock. Expect roughly three winners in four, an average winner near
+    +6 percent and an average loser near -8 percent; the edge is accuracy,
+    not payoff.
+    STOP MECHANICS (2026 update, from 8-year backtest): the 3/4 ATR
+    stop is checked against the daily CLOSE, not intraday. Wicks below
+    the level do not stop you; only a close below it does, exit next
+    open. This single change lifted the Playbook's CAGR from 21% to
+    30% at the same drawdown across 2018-2026 by killing false
+    shakeouts, and improves every SW screen tested.
+  expr: >
+    rs_rank >= 80 and adj_close > sma_200 and (new_lo7 == 1 or rsi_2 < 10)
+    and dist_ema_21 >= 2.6
+  emit: [adj_close, rs_rank, dist_ema_21, dist_sma_50, rsi_2, rsi_14, atr_pct, stop_3atr, hi7_prior, sma_200]
+  sort_by: rs_rank
+  ascending: false
+  min_history: 200
+
+- name: trend_stack_swing
+  title: SW - Trend Stack
+  horizon: Swing - two to eight weeks, trailing exit, hard stop under every trade
+  origin: This project's swing lab (Sep 2026) - a fresh Full Trend Stack, taken only in a volatile tape
+  description: >
+    The FIRST day a stock stacks above its 20, 50 and 200-day averages after
+    at least ten sessions of not doing so - a fresh entry into a Stage 2
+    stack, not a stock that has sat there for months - taken only when India
+    VIX is in the top third of its one-year range and the Nifty's 20-day
+    high-to-low range is at least 6.9 percent. Those two market conditions
+    mark the first weeks of a rebound after a sell-off; the same entry in a
+    quiet tape is a coin flip. The stop column is three ATRs under the close.
+  why: >
+    Across 4,661 fresh trend-stack entries from June 2024 the raw setup won
+    28 percent of trades with a 3 to 1 payoff. Every stock-level filter
+    failed at least one half of the sample; the two market-level ones here
+    passed both (day-clustered t of 5 in each half), lifting the win rate
+    to 42-44 percent and the average trade to +7.7 percent. As a ten-slot
+    account: 42 percent a year, 5 percent maximum drawdown, positive in both
+    halves and in six of nine quarters, robust to 100 random orderings and
+    to 20 percent parameter changes. The catch is that the filter was on in
+    only three windows of the sample, so treat it as a three-episode result.
+  manage: >
+    Buy the next open. Stop at fill minus 3 ATR(14), placed on fill, never
+    moved. Exit at the next open after any close below the 50-day EMA, or
+    at the close of the 60th session. Ten equal slots, highest RS rank
+    first. Expect to lose six trades in ten and to sit flat for whole
+    quarters when the market filter is off - the winners are +15 to +40
+    percent trend rides and the losers are one stop each.
+    STOP MECHANICS (2026 update, from 8-year backtest): the 3/4 ATR
+    stop is checked against the daily CLOSE, not intraday. Wicks below
+    the level do not stop you; only a close below it does, exit next
+    open. This single change lifted the Playbook's CAGR from 21% to
+    30% at the same drawdown across 2018-2026 by killing false
+    shakeouts, and improves every SW screen tested.
+  expr: >
+    fresh_trend_stack == 1 and mkt_vix_pctile_1y >= 63.7 and mkt_nifty_range_20d >= 6.855
+  emit: [adj_close, rs_rank, ema_50, dist_sma_50, atr_pct, stop_3atr, mkt_vix_pctile_1y, mkt_nifty_range_20d, mkt_gate_on]
+  sort_by: rs_rank
+  ascending: false
+  min_history: 200
+
+- name: momentum_swing
+  title: SW - Momentum Leader
+  horizon: Swing - two to eight weeks, 1:3 target, hard stop under every trade
+  origin: This project's swing lab (Sep 2026) - a fresh Momentum Leader near its high, taken only in a volatile tape with the breadth gate on
+  description: >
+    The FIRST day a stock qualifies as a Momentum Leader (12-1 momentum over
+    15 percent, up more than 12 percent in three months and 15 percent in
+    six) after at least ten sessions of not qualifying, while it is within
+    10 percent of its 52-week high, India VIX is in the top 40 percent of
+    its one-year range, and the breadth gate is on (more than half the
+    universe above its 50-day, or within six months of a breadth thrust).
+    Stop and 1:3 target columns are four and twelve ATRs from the close.
+  why: >
+    Raw fresh Momentum Leader entries with a 4 ATR stop and a 1:3 target
+    won 46 percent and lost 27 percent of a ten-slot account in the 2025
+    correction. The three conditions here - near the high, volatile tape,
+    breadth gate - passed both halves of the sample and lifted the win rate
+    to 57 percent with +8 percent per trade: 34 percent a year, 11 percent
+    maximum drawdown, robust to random orderings and parameter changes, but
+    positive in only five of nine quarters and idle in two. Like every
+    trend filter that survived, it is a regime call validated on a handful
+    of rebounds, so size it as a second strategy, not the first.
+  manage: >
+    Buy the next open. Stop at fill minus 4 ATR(14); target at fill plus
+    12 ATR (three times the risk), both placed on fill; whichever is
+    touched first, the stop wins on a bar that touches both. Time stop at
+    the close of the 60th session. Ten equal slots, highest RS first. Win
+    rate near 57 percent with a 3 to 1 payoff - the losses come in runs
+    when a rebound fails, which is what the breadth gate is there to limit.
+    STOP MECHANICS (2026 update, from 8-year backtest): the 3/4 ATR
+    stop is checked against the daily CLOSE, not intraday. Wicks below
+    the level do not stop you; only a close below it does, exit next
+    open. This single change lifted the Playbook's CAGR from 21% to
+    30% at the same drawdown across 2018-2026 by killing false
+    shakeouts, and improves every SW screen tested.
+  expr: >
+    fresh_momentum_leaders == 1 and pct_from_52w_high >= -9.94
+    and mkt_vix_pctile_1y >= 59.9 and mkt_gate_on == 1
+  emit: [adj_close, rs_rank, mom_12_1, pct_from_52w_high, atr_pct, stop_4atr, tgt_3r_4atr, mkt_vix_pctile_1y, mkt_gate_on]
+  sort_by: rs_rank
+  ascending: false
+  min_history: 250
+
+- name: sw_leader_dip_concentrated
+  title: SW - Leader Dip Concentrated
+  horizon: Swing - about a week and a half, exit on the reversal, hard stop under every trade
+  origin: The Leader Dip Playbook with both dip triggers required at once (hardening from Sep 2026 8-year backtest)
+  description: >
+    The Leader Dip Playbook (RS rank 80+, above the 200 DMA, at least 2.6
+    percent above the 21 EMA, breadth gate on) restricted to signals where
+    BOTH short-term triggers fire on the same day: a new 7-day closing low
+    AND an RSI(2) below 10. Fewer trades, deeper dips, higher win rate.
+    Stop column is 3 ATRs below the close, checked against the daily close.
+  why: >
+    Across 3,050 Playbook signals from 2018-2026 the shipped version wins
+    69 percent of trades and drops 25 percent from peak in the 2018-19
+    midcap bear. Requiring BOTH triggers instead of either cuts trades by
+    two-thirds (keeps 24 percent), but wins 72 percent of them at +2.84
+    percent per trade after costs. As a 10-slot account: 22.5 percent a
+    year, only 14 percent drawdown, worst quarter -7 percent, 23 of 32
+    quarters positive. The concentrated version is designed for lower
+    activity and lower drawdown — take it when the shipped Playbook has
+    filtered too little for your comfort.
+  manage: >
+    Buy next open. Stop at fill minus 3 ATR(14), checked against the daily
+    close only (wicks below the stop are ignored, exit next open on a
+    close below). Exit next open after any close above the highest close
+    of the previous seven sessions, or at the close of the 20th session.
+    Ten equal slots, highest RS rank first.
+  expr: >
+    rs_rank >= 80 and adj_close > sma_200 and new_lo7 == 1 and rsi_2 < 10
+    and dist_ema_21 >= 2.6 and mkt_gate_on == 1
+  emit: [adj_close, rs_rank, dist_ema_21, dist_sma_50, rsi_2, atr_pct, stop_3atr, hi7_prior, mkt_gate_on]
+  sort_by: rs_rank
+  ascending: false
+  min_history: 200
+
+- name: sw_rsi2_snapback
+  title: SW - RSI(2) Snapback
+  horizon: Swing - one to two weeks, exit on the reversal, hard stop under every trade
+  origin: Connors' RSI(2) pullback, groomed by this project's swing lab (Sep 2026)
+  description: >
+    Connors' two-period RSI has dropped under 8 in a stock above both its
+    50 and 200-day averages, with the 200-day rising and a positive
+    six-month return - a sharp, short pullback inside an established
+    uptrend. Two conditions were added by the swing lab: the close must still
+    be at least 8.7 percent above the 50-day average (the pullback has not
+    reached the trend line), and the market gate must be on (more than half
+    the universe above its 50-day, or within six months of a breadth
+    thrust). Stop column is four ATRs under the close.
+  why: >
+    The raw RSI(2) snapback won 66 percent of trades for +1.0 percent each
+    but lost 30 percent of a ten-slot account in the 2025 correction. Of
+    about 200 filters tested, "still extended above the 50-day" and the
+    breadth gate were the two stock-and-market conditions that raised both
+    win rate and expectancy in each half of the sample. Groomed: 74 percent
+    win, +2.4 percent per trade, profit factor 2.5, only 6 percent of trades
+    stopped, 30 percent a year on ten slots with an 8 percent drawdown,
+    positive in seven of nine quarters (worst -3.2 percent), robust to 100
+    random orderings and 20 percent parameter changes. It overlaps the
+    Leader Dip Playbook on only 13 percent of trades because it does not
+    require a top-20 RS rank.
+  manage: >
+    Buy the next open. Stop at fill minus 4 ATR(14), placed on fill, never
+    moved. Exit at the next open after any close above the highest close of
+    the previous seven sessions, or at the close of the 60th session. Ten
+    equal slots, highest RS rank first, one position per stock. Roughly 22
+    signals a month with the gate on; none when it is off.
+    STOP MECHANICS (2026 update, from 8-year backtest): the 3/4 ATR
+    stop is checked against the daily CLOSE, not intraday. Wicks below
+    the level do not stop you; only a close below it does, exit next
+    open. This single change lifted the Playbook's CAGR from 21% to
+    30% at the same drawdown across 2018-2026 by killing false
+    shakeouts, and improves every SW screen tested.
+  expr: >
+    rsi_2 < 8 and adj_close > sma_200 and adj_close > sma_50
+    and sma_200_slope > 0 and ret_120d > 0
+    and dist_sma_50 >= 8.7 and mkt_gate_on == 1
+  emit: [adj_close, rs_rank, rsi_2, dist_sma_50, dist_ema_21, atr_pct, stop_4atr, hi7_prior, mkt_gate_on]
+  sort_by: rs_rank
+  ascending: false
+  min_history: 200
+
+- name: sw_double_seven
+  title: SW - Double Seven
+  horizon: Swing - one to two weeks, exit on the reversal, hard stop under every trade
+  origin: Connors and Alvarez's Double Seven, groomed by this project's swing lab (Sep 2026)
+  description: >
+    A stock above its 200-day average has closed below every one of its
+    previous seven closes. The swing lab added three conditions: the close
+    is still at least 1 percent above the 21-day EMA (the dip has not broken
+    the short trend), the stock's ATR is at least 5.3 percent of price (a
+    mover, so the bounce is worth the stop), and the market gate is on. It
+    is the Leader Dip's parent rule without the RS-rank requirement; about
+    half its trades are names the Playbook also takes, the rest are
+    high-volatility non-leaders. Stop column is three ATRs under the close.
+  why: >
+    Raw Double Seven with a hard stop lost money as an account (-44 percent
+    drawdown, negative first half). With the three filters: 76 percent win,
+    +3.7 percent per trade, profit factor 2.6, 55 percent a year on ten
+    slots with an 8 percent drawdown, both halves strongly positive, six of
+    nine quarters positive (worst -5.0 percent), 5th-percentile of 100
+    random orderings +51 percent. The high-ATR condition is what turns a
+    sub-1 percent edge into a 3.7 percent one: the same bounce in a 2 percent
+    ATR stock is not worth taking.
+  manage: >
+    Buy the next open. Stop at fill minus 3 ATR(14), placed on fill, never
+    moved. Exit at the next open after any close above the highest close of
+    the previous seven sessions, or at the close of the 60th session. Ten
+    equal slots, highest RS rank first, one position per stock; if a name is
+    already held from the Leader Dip Playbook, do not add. About 21 signals
+    a month with the gate on.
+    STOP MECHANICS (2026 update, from 8-year backtest): the 3/4 ATR
+    stop is checked against the daily CLOSE, not intraday. Wicks below
+    the level do not stop you; only a close below it does, exit next
+    open. This single change lifted the Playbook's CAGR from 21% to
+    30% at the same drawdown across 2018-2026 by killing false
+    shakeouts, and improves every SW screen tested.
+  expr: >
+    new_lo7 == 1 and adj_close > sma_200
+    and dist_ema_21 >= 1.0 and atr_pct >= 5.3 and mkt_gate_on == 1
+  emit: [adj_close, rs_rank, dist_ema_21, atr_pct, stop_3atr, lo7_prior, hi7_prior, rsi_2, mkt_gate_on]
+  sort_by: rs_rank
+  ascending: false
+  min_history: 200
+
+- name: sw_monthly_r1_retest
+  title: SW - Monthly R1 Retest
+  horizon: Swing - about a week, exit on the reversal, hard stop under every trade
+  origin: Monthly-pivot R1 retest, groomed by this project's swing lab (Sep 2026)
+  description: >
+    Price broke above the monthly R1 pivot two to fifteen sessions ago and
+    has now pulled back to within 1 percent above (or 2.5 percent below) it
+    on the last three days' lows AND today's close is still within 3
+    percent above R1 (a fresh retest, not a stock that has already run
+    up 5-20 percent away from the level) - broken resistance being
+    tested as support. The swing lab added: the stock is at least 33 percent above its
+    200-day average (a genuine leader, not a bounce off the bottom), its ATR
+    is at least 4.3 percent of price, and the market gate is on. Stop column
+    is three ATRs under the close.
+  why: >
+    The raw retest with a hard stop won 32 percent on a trailing exit and
+    lost 19 percent a year in the first half. Groomed and switched to the
+    seven-day-high reversal exit: 73 percent win, +1.3 percent per trade,
+    profit factor 1.6, 28 percent a year on ten slots with a 9 percent
+    drawdown, positive in seven of nine quarters (worst -4.1 percent),
+    robust. The edge per trade is the thinnest of the swing screens - six-bar
+    holds, small bounces - but it hardly overlaps the Leader Dip Playbook
+    (about 1 percent of trades on the same day), so it fills slots the other
+    screens leave empty.
+  manage: >
+    Buy the next open. Stop at fill minus 3 ATR(14), placed on fill, never
+    moved. Exit at the next open after any close above the highest close of
+    the previous seven sessions, or at the close of the 60th session. Ten
+    equal slots, highest RS rank first. Treat it as the third choice when
+    the Playbook and Double Seven have nothing: about 28 signals a month with
+    the gate on.
+    STOP MECHANICS (2026 update, from 8-year backtest): the 3/4 ATR
+    stop is checked against the daily CLOSE, not intraday. Wicks below
+    the level do not stop you; only a close below it does, exit next
+    open. This single change lifted the Playbook's CAGR from 21% to
+    30% at the same drawdown across 2018-2026 by killing false
+    shakeouts, and improves every SW screen tested.
+  expr: >
+    dist_m_r1 > 0 and dist_m_r1 < 3.0 and low3_dist_m_r1 < 1.0 and low3_dist_m_r1 > -2.5
+    and since_m_r1_cross >= 2 and since_m_r1_cross <= 15
+    and dist_sma_200 >= 33 and atr_pct >= 4.3 and mkt_gate_on == 1
+  emit: [adj_close, rs_rank, m_r1, dist_m_r1, low3_dist_m_r1, dist_sma_200, atr_pct, stop_3atr, hi7_prior, mkt_gate_on]
+  sort_by: rs_rank
+  ascending: false
+  min_history: 200
+
+- name: vl_volume_spike_breakout
+  title: VL - Volume Spike Breakout
+  horizon: Swing - 2 to 8 weeks, trailing exit at close < 21 EMA, hard stop
+  origin: This project's volume lab (Sep 2026) - the filtered winner across 1,920 8-year Midcap trades
+  description: >
+    A stock makes a new 20-day CLOSE HIGH on at least 5x its 20-day average
+    volume, closes in the TOP 30 percent of the day's range, has a relative
+    strength rank of at least 60, is above its 200-day SMA, has the 21-EMA
+    above the 50-EMA (short trend above medium trend), and the market gate
+    is on. The stack of filters was chosen because it lifted mean per trade
+    from +1.95 to +4.88 percent and cut drawdown from -18 to -13 percent in
+    both halves of an 8-year sample of 360 trades.
+  why: >
+    Volume-spike breakouts on their own win only 39 percent of the time at
+    +2.0 percent per trade and draw down 18 percent. The three additions
+    above raise win rate to 41 percent, double per-trade mean to +4.9
+    percent, and trim drawdown to -13 percent (equal-weight CAGR + MaxDD
+    score +2.8, the first breakout variant in this study to score positive).
+    Trend continuation, not mean reversion: 40 percent win at 3-to-1 payoff.
+  manage: >
+    Buy next open. Stop is entry minus 3 ATR(14), CHECKED AGAINST THE DAILY
+    CLOSE only (wicks below the stop are ignored - exit next open only if
+    the close settles below). Exit next open after the first close below
+    the 21 EMA, or at the close of session 60. Ten equal slots, highest RS
+    first. Expect roughly one signal a week (45/year), 40 percent win rate
+    with big winners paying for small losers - not a mostly-winning system.
+  expr: >
+    vol_ratio >= 5 and adj_close > close_hi_20 and close_pos >= 0.7
+    and rs_rank >= 60 and adj_close > sma_200 and ema_21 > ema_50
+    and mkt_gate_on == 1
+  emit: [adj_close, rs_rank, vol_ratio, close_pos, dist_ema_21, atr_pct, stop_3atr, close_hi_20, mkt_gate_on]
+  sort_by: rs_rank
+  ascending: false
+  min_history: 250
+
+- name: vl_long_base_breakout
+  title: VL - Long Base Breakout
+  horizon: Positional - weeks to months, trailing exit or fixed hold
+  origin: Multi-year consolidation break (MUKANDLTD-style pattern) - broken resistance turning support
+  description: >
+    A stock makes a new 2-year (500-session) CLOSE HIGH on at least 2x its
+    20-day average volume, above its 200-day SMA, with the market gate on.
+    Catches names that have been range-bound or building a long base for
+    years and finally clear the ceiling. These moves, when they succeed,
+    tend to run for months rather than weeks.
+  why: >
+    Not backtested at scale by this project (multi-year breakouts are rare -
+    perhaps 2-5 per week across the entire universe). Included as a
+    watchlist screen for a pattern that is well-documented in trading
+    literature (O'Neil "cup with handle", Weinstein Stage 2 transition,
+    Minervini "power play"). Trade discretionally with confirmation on the
+    weekly chart; do not size as a system signal.
+  manage: >
+    Add to watchlist on first appearance. Wait for at least 2-3 sessions of
+    holding above the breakout level. Enter at the open of the third close
+    that stays above the level, stop at 3 ATR below entry (close-based),
+    trail behind the 50-day SMA once the trade is +10 percent ahead. This
+    is a positional trade - expect to hold 2-6 months if it works.
+  expr: >
+    adj_close > close_hi_500 and vol_ratio >= 2 and adj_close > sma_200
+    and mkt_gate_on == 1 and bars_available >= 500
+  emit: [adj_close, rs_rank, vol_ratio, close_hi_500, atr_pct, stop_3atr, sma_200, mkt_gate_on]
+  sort_by: rs_rank
+  ascending: false
+  min_history: 500
+
+- name: vl_wyckoff_spring
+  title: VL - Wyckoff Spring
+  horizon: Short term - 1 to 3 weeks, exit on the reversal, hard stop
+  origin: Wyckoff Phase C spring - false breakdown that reverses on high volume
+  description: >
+    Today's low undercuts the prior 20-day low (the spring), the close is
+    back above that low (the reclaim), and volume is at least 2x the 20-day
+    average (the effort showing accumulation). Reserved for stocks above
+    their 200-day SMA (spring in a downtrending stock is a failed pattern).
+    Only fires about 40 times a year across the universe - highly selective.
+  why: >
+    On 353 signals over 8 years in Nifty Midcap 150 constituents: 70 percent
+    win rate, +1.05 percent per trade net after costs, drawdown -4.1
+    percent on a 10-slot account. Highest-accuracy volume signal in the
+    lab, but very few trades (~4 per month). Real accumulation only, not
+    a general oversold bounce.
+  manage: >
+    Buy next open. Stop is the spring bar's low minus 0.5 ATR, checked
+    against the daily close (wicks ignored). Exit next open after any
+    close above the highest close of the prior 7 sessions, or at the
+    close of session 20. Size normally (10 percent slot).
+  expr: >
+    spring == 1 and adj_close > sma_200 and vol_ratio >= 2 and mkt_gate_on == 1
+  emit: [adj_close, rs_rank, spring_low, vol_ratio, dist_spring_low, atr_pct, stop_3atr, mkt_gate_on]
+  sort_by: rs_rank
+  ascending: false
+  min_history: 200
+
+- name: vl_pocket_pivot
+  title: VL - Pocket Pivot
+  horizon: Swing - 2 to 8 weeks, trailing exit at close < 21 EMA
+  origin: Chris Kacher and Gil Morales - up-day volume beats every down-day volume from the last 10 sessions
+  description: >
+    Today is an up day (close greater than previous close), volume exceeds
+    the maximum volume of any DOWN day in the past 10 sessions (accumulation
+    inside a base), the close is above the 50-day SMA, not extended more
+    than 15 percent above the 21-EMA, and above the 200-day SMA. The gate
+    must be on. Buying is showing up inside a consolidation before the
+    breakout does.
+  why: >
+    Classical volume signal, hardened in this project's volume lab. 33
+    percent win, +1.08 percent per trade net, +10 percent CAGR, -23 percent
+    drawdown across 8 years. Lower win rate than the filtered breakout but
+    fires 5-10x more often, so a natural companion when the market has
+    many stocks basing. Trend continuation - expect payoff-driven, not
+    accuracy-driven, results.
+  manage: >
+    Buy next open. Stop entry minus 3 ATR(14), checked against the daily
+    close. Exit next open after the first close below the 21 EMA, or at
+    the close of session 60. Half slot size (5 percent, not 10) because
+    win rate is one in three; sizing normal risks a losing streak wiping
+    a big chunk of the account.
+  expr: >
+    pocket_pivot == 1 and adj_close > sma_50 and adj_close > sma_200
+    and dist_ema_21 <= 15 and mkt_gate_on == 1
+  emit: [adj_close, rs_rank, dist_sma_10, dist_ema_21, atr_pct, stop_3atr, down_vol_max_10, mkt_gate_on]
+  sort_by: rs_rank
+  ascending: false
+  min_history: 200
+
+- name: smooth_momentum
+  title: Smooth Momentum
+  horizon: Positional - monthly portfolio
+  origin: Da, Gurun and Warachka, "Frog in the Pan" (2014), on top of 12-1 momentum
+  description: >
+    The momentum leaders, restricted to names whose advance came as many small
+    up days rather than a few large ones - at least 55 percent of the last
+    sixty sessions closed higher than the day before.
+  why: >
+    The Frog in the Pan finding is that momentum continues when the path was
+    smooth and reverses when it was jumpy. Gradual information is
+    under-reacted to; a single jump has already been priced. Filtering the
+    momentum portfolio by the share of up days raised its out-of-sample
+    excess return from 1.2 to 2.0 percent a month here, in the direction the
+    paper predicts. A stricter 60 percent cut breaks it - too few names.
+  manage: >
+    A monthly portfolio, not a trade. Top twenty by 12-1 momentum among the
+    names that pass, equal weight, rebalanced on the first session of the
+    month, no stop.
+  expr: >
+    mom_12_1 > 15 and ret_60d > 12 and ret_120d > 15
+    and adj_close > sma_50 and sma_50 > sma_200 and smooth_60 >= 55
+  emit: [adj_close, mom_12_1, smooth_60, ret_60d, ret_120d, rs_rank]
+  sort_by: mom_12_1
+  min_history: 250

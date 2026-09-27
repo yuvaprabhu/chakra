@@ -1,0 +1,83 @@
+{
+ "daily": [],
+ "hourly": [
+  {
+   "label": "FVG hourly last 1m | all",
+   "n": 7866,
+   "win": 37.7,
+   "mean_net": -0.15,
+   "mean_R": 0.11,
+   "target": 33.0,
+   "stopped": 57.0,
+   "timed": 10.0,
+   "avg_bars": 4.5,
+   "pf": 0.81,
+   "gross_mean": 0.15
+  },
+  {
+   "label": "FVG hourly last 1m | above 200-SMA",
+   "n": 4701,
+   "win": 40.8,
+   "mean_net": -0.01,
+   "mean_R": 0.19,
+   "target": 35.0,
+   "stopped": 54.0,
+   "timed": 11.0,
+   "avg_bars": 4.6,
+   "pf": 0.99,
+   "gross_mean": 0.29
+  },
+  {
+   "label": "FVG hourly last 1m | above 200-SMA & RS>=80",
+   "n": 1779,
+   "win": 46.1,
+   "mean_net": 0.33,
+   "mean_R": 0.34,
+   "target": 40.0,
+   "stopped": 49.0,
+   "timed": 10.0,
+   "avg_bars": 4.6,
+   "pf": 1.4,
+   "gross_mean": 0.63
+  },
+  {
+   "label": "IFVG hourly last 1m | all",
+   "n": 4768,
+   "win": 31.8,
+   "mean_net": -0.32,
+   "mean_R": -0.05,
+   "target": 31.0,
+   "stopped": 67.0,
+   "timed": 3.0,
+   "avg_bars": 2.5,
+   "pf": 0.53,
+   "gross_mean": -0.02
+  },
+  {
+   "label": "IFVG hourly last 1m | above 200-SMA",
+   "n": 2666,
+   "win": 34.2,
+   "mean_net": -0.25,
+   "mean_R": 0.02,
+   "target": 33.0,
+   "stopped": 64.0,
+   "timed": 3.0,
+   "avg_bars": 2.5,
+   "pf": 0.62,
+   "gross_mean": 0.05
+  },
+  {
+   "label": "IFVG hourly last 1m | above 200-SMA & RS>=80",
+   "n": 913,
+   "win": 36.4,
+   "mean_net": -0.12,
+   "mean_R": 0.08,
+   "target": 35.0,
+   "stopped": 62.0,
+   "timed": 3.0,
+   "avg_bars": 2.6,
+   "pf": 0.83,
+   "gross_mean": 0.18
+  }
+ ]
+}
