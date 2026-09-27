@@ -47,8 +47,8 @@ Not included in this tarball (regeneratable):
 **Prerequisites**
 - Python 3.11 (or 3.10+)
 - `pip install -r requirements.txt`
-- An Upstox API access token (for daily data refresh — not needed to just
-  explore what's already in the tarball). Set `UPSTOX_ACCESS_TOKEN` env var.
+- No API tokens. Upstox historical-candle is free/unauthenticated; NSE
+  bhavcopy uses a session cookie warmed automatically.
 
 **Just look at what's here (no refresh):**
 ```bash
@@ -61,11 +61,11 @@ The dashboard loads with today's screens, portfolio audit, backtest views.
 
 **Refresh with today's data:**
 ```bash
-export UPSTOX_ACCESS_TOKEN="…"
 bash scripts/daily_update.sh
 ```
 This: pulls today's bars → recomputes features → evaluates all rules →
-exports dashboard JSON.
+exports dashboard JSON. No auth needed. Optional: `MCAP_FLOOR_CR=2000` or
+`DAYS=15` env vars.
 
 **Re-run the strategy audit (real-money source of truth):**
 ```bash
